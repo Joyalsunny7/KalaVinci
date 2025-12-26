@@ -1,0 +1,63 @@
+<%- include('../partials/header', { title: 'Login | Kala Vinci' }) %>
+  <link rel="stylesheet" href="/css/user/login.css">
+<main>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <h1>Login</h1>
+        <div class="breadcrumbs">KALA VINCI &nbsp; > &nbsp; Login</div>
+    </section>
+
+    <!-- Login Form Section -->
+    <section class="login-section">
+        <div class="login-card">
+
+            <a href="/auth/google" class="google-btn" type="button">
+                <img 
+                  src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png"
+                  alt="Google"
+                  width="18"
+                >
+                Continue with Google
+            </a>
+
+            <div class="divider">OR</div>
+
+            <form action="/login" method="POST" id="loginForm">
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <p class="signup-text">
+                Don't have an account? <a href="/signup">Sign up</a>
+            </p>
+        </div>
+    </section>
+
+</main>
+
+<%- include('../partials/footer') %>
+
+

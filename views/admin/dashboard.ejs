@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kala Vinci Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="/images/ICON1.png" alt="Logo" class="brand-logo">
+            <span class="brand-name">Admin</span>
+        </div>
+
+        <nav class="nav-group">
+            <a href="#" class="nav-item active"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-box"></i> Products</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-users"></i> Customers</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Report</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Coupons</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Category</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Banner Management</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Offer Management</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Artist Management</a>
+            <div style="margin-top: 24px;"></div>
+            <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+            <div style="margin-top: auto; padding-top: 40px;">
+                <a href="#" class="nav-item"><i class="fa-solid fa-plus"></i> Extras</a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="breadcrumbs">Admin &nbsp; > &nbsp; Dashboard</div>
+
+        <!-- Top Stats -->
+        <div class="stats-grid">
+            <div class="card">
+                <div class="card-title">Total Sales</div>
+                <div class="card-subtitle">THIS MONTH</div>
+                <div class="card-value">₹ 27,00,000</div>
+                <div class="bar-chart">
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 90%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                    <div class="bar" style="height: 30%"></div>
+                    <div class="bar" style="height: 65%"></div>
+                    <div class="bar" style="height: 45%"></div>
+                    <div class="bar" style="height: 75%"></div>
+                    <div class="bar" style="height: 85%"></div>
+                    <div class="bar" style="height: 55%"></div>
+                    <div class="bar" style="height: 95%"></div>
+                    <div class="bar" style="height: 40%"></div>
+                    <div class="bar" style="height: 60%"></div>
+                    <div class="bar" style="height: 80%"></div>
+                    <div class="bar" style="height: 50%"></div>
+                    <div class="bar" style="height: 70%"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Customers</div>
+                <div class="card-subtitle">THIS MONTH</div>
+                <div class="card-value">107</div>
+                <div class="line-chart"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Orders</div>
+                <div class="card-subtitle">MONTHLY GOALS : 1,000</div>
+                <div class="card-value">86</div>
+                <div class="progress-container">
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-style: italic;">266 Left</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Sections -->
+        <div class="details-grid">
+            <!-- Best Selling -->
+            <div class="card">
+                <div class="card-title">Best Selling</div>
+                <div class="card-subtitle">THIS MONTH</div>
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 16px -24px;">
+                
+                <div style="font-size: 24px; font-weight: 700; margin: 24px 0;">₹ 1200000 <span style="font-size: 12px; font-weight: 400; color: var(--text-secondary);">— Total Sales</span></div>
+                
+                <div class="best-selling-list">
+                    <div class="selling-item">
+                        <span>Metamorphosis Painting</span>
+                        <span>₹ 1449704 Sales</span>
+                    </div>
+                    <div class="selling-item">
+                        <span>Vapour Rise Eyes</span>
+                        <span>₹ 85000 Sales</span>
+                    </div>
+                    <div class="selling-item">
+                        <span>Pain Of Girl</span>
+                        <span>₹ 7500 Sales</span>
+                    </div>
+                </div>
+
+                <div class="donut-container"></div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card table-card">
+                <div class="table-header">
+                    <div class="card-title" style="margin-bottom: 0;">Recent Orders</div>
+                    <a href="#" class="view-all-btn">View All</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Briancon White painting</td>
+                            <td>20 Dec, 2024</td>
+                            <td>₹ 2,55,377</td>
+                            <td class="status">Processing</td>
+                        </tr>
+                        <tr>
+                            <td>For The Love Of Tulip</td>
+                            <td>19 Mar, 2025</td>
+                            <td>₹ 35,744</td>
+                            <td class="status">Processing</td>
+                        </tr>
+                        <tr>
+                            <td>Tree Of Life</td>
+                            <td>7 Feb, 2025</td>
+                            <td>₹ 1250</td>
+                            <td class="status">Completed</td>
+                        </tr>
+                        <tr>
+                            <td>Pain Of Girl</td>
+                            <td>29 Jan, 2025</td>
+                            <td>₹ 2500</td>
+                            <td class="status">Completed</td>
+                        </tr>
+                        <tr>
+                            <td>Vapour Rise Eyes</td>
+                            <td>27 Jan, 2025</td>
+                            <td>₹ 8500</td>
+                            <td class="status">Completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

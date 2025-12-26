@@ -1,0 +1,12 @@
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+a {
+    color: inherit;
+    transition: 0.2s;
+}

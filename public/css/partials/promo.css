@@ -1,0 +1,14 @@
+
+.promo-bar {
+    background-color: #8db08f;
+    color: #ffffff;
+    text-align: center;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.promo-bar a {
+    text-decoration: underline;
+    font-weight: 600;
+}

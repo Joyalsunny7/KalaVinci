@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/admin-login.css">
+    <link rel="icon" type="image/png" href="/images/ICON.png">
+    <title>Kala Vinci - Admin Login</title>
+</head>
+
+<body>
+
+    <div class="login-wrapper">
+
+        <div class="login-card">
+
+            <!-- Brand Header -->
+            <div class="brand-header">
+                <div class="logo-container">
+                    <img 
+                        src="/images/ICON1.png"
+                        alt="Logo"
+                        class="logo-img"
+                    />
+                </div>
+
+                <h1 class="admin-title">Admin</h1>
+                <span class="brand-name">Kala Vinci</span>
+            </div>
+
+            <!-- Login Form -->
+            <form action="/admin/login" method="POST" class="login-form">
+
+
+                <div class="form-group">
+                    <label class="label-text" for="email">Email</label>
+                    <input class="input-field" type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-text" for="password">Password</label>
+                    <input class="input-field" type="password" id="password" name="password" required>
+                </div>
+
+                <button class="submit-btn" type="submit">
+                    Login
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        © Kala Vinci Design Studio
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --sage-green: #8db08f;
+  --sage-hover: #7e9e80;
+  --admin-green: #006B3F;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #F9FAFB;
+  color: #374151;
+}
+
+
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  animation: scaleIn 0.4s ease-out;
+}
+
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  padding: 14px 18px;
+  border-radius: 16px;
+  background-color: #F3F4F6;
+  font-size: 14px;
+  border: none;
+}
+
+.form-group input:focus {
+  background-color: #ECEFF1;
+}
+
+
+.disclaimer {
+  font-size: 12px;
+  color: #6B7280;
+  line-height: 1.4;
+}
+
+
+.submit-btn {
+  margin-top: 12px;
+  padding: 14px;
+  background-color: var(--sage-green);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: var(--sage-hover);
+}
+
+
+.signup-text {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.signup-text a {
+  color: var(--admin-green);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,52 @@
+<%- include('../partials/header', { title: 'Signup | Kala Vinci' }) %>
+
+<link rel="stylesheet" href="/css/user/signup.css">
+
+<main class="login-wrapper">
+
+    <div class="login-card">
+
+        <form class="signup-form" method="POST" action="/signup">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Enter your Fullname" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile</label>
+                <input type="tel" name="phone" placeholder="Enter your mobile number" required>
+            </div>
+
+            <p class="disclaimer">
+                By creating an account, you agree to our
+                <strong>Terms of Service</strong> and
+                <strong>Privacy Policy</strong>.
+            </p>
+
+            <button type="submit" class="submit-btn">
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="signup-text">
+            Already have an account?
+            <a href="/login">Log in</a>
+        </p>
+
+    </div>
+
+</main>
+
+<%- include('../partials/footer') %>
