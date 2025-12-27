@@ -1,0 +1,31 @@
+/* ================= ACCOUNT HEADER ================= */
+
+.account-header {
+  background-color: #e6e5e5;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 40px;
+}
+
+.account-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb .arrow {
+  font-size: 14px;
+}
+
+.breadcrumb .current {
+  color: #111827;
+  font-weight: 500;
+}

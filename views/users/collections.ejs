@@ -1,0 +1,163 @@
+<%- include('../partials/header', { title: 'Login | Kala Vinci' }) %>
+  <link rel="stylesheet" href="/css/user/collections.css">
+
+<div class="container">
+    <header class="top-bar">
+        <div class="applied-filters">
+            <p class="filter-label">Applied Filters:</p>
+            <div class="tags">
+                <span class="tag">Styles <i>&times;</i></span>
+                <span class="tag">Size: Small <i>&times;</i></span>
+            </div>
+        </div>
+        <div class="results-header">
+            <p class="results-count">Showing 1-9 Of 36 Results.</p>
+            <div class="sort-by">SORT BY ⌵</div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+
+        <aside class="sidebar">
+            <div class="filter-box">
+                <h4>Categories</h4>
+                <ul class="filter-list">
+                    <li><label><input type="checkbox"> All</label></li>
+                    <li><label><input type="checkbox"> Oil Paintings</label></li>
+                    <li><label><input type="checkbox"> Acrylic Paintings</label></li>
+                    <li><label><input type="checkbox"> Pen and Pencil Drawings</label></li>
+                </ul>
+
+                <div class="dropdown-filter">
+                    <span>SELECT STYLES</span> <i>⌵</i>
+                </div>
+                <div class="dropdown-filter">
+                    <span>SELECT SIZE</span> <i>⌵</i>
+                </div>
+
+                <div class="price-filter">
+                    <h4>Price</h4>
+                    <input type="range" min="0" max="100000" value="30000">
+                    <div class="price-label">₹ 30,000</div>
+                </div>
+            </div>
+        </aside>
+
+
+        <main class="content">
+            <div class="product-grid">
+                
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>Summer Rendezvous Painting</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge in-stock">IN STOCK</span>
+                            <span class="price">
+                                <span class="old-price">₹ 8,000</span> ₹ 5,199
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>"Yesterday is Always Strange1"</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge in-stock">IN STOCK</span>
+                            <span class="price">
+                                <span class="old-price">₹ 37,000</span> ₹ 34,029
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>Urban Mosaic Painting</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge in-stock">IN STOCK</span>
+                            <span class="price">
+                                <span class="old-price">₹ 90,000</span> ₹ 83,135
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>Tides Of Change Painting</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge sold">SOLD</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>XLR8 Whey Protien</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge in-stock">IN STOCK</span>
+                            <span class="price">
+                                <span class="old-price">₹ 40,000</span> ₹ 37,734
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="img-container">
+                        <img src="https://via.placeholder.com/300" alt="Art">
+                    </div>
+                    <div class="product-info">
+                        <h3>Peyote Seed Cut No.18b</h3>
+                        <div class="stars">★★★★★</div>
+                        <div class="card-footer">
+                            <span class="badge in-stock">IN STOCK</span>
+                            <span class="price">
+                                <span class="old-price">₹ 1,200,000</span> ₹ 1,033,800
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <nav class="pagination">
+                <button class="arrow">❮</button>
+                <button class="active">1</button>
+                <button>2</button>
+                <span class="dots">...</span>
+                <button>23</button>
+                <button>24</button>
+                <button class="arrow">❯</button>
+            </nav>
+        </main>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

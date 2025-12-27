@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   Login,
+  PostLogin,
   Signup,
   PostSignup,
   VerifyOtpPage,
@@ -8,32 +9,53 @@ import {
   ForgotPassword,
   PostForgotPassword,
   ResetPasswordPage,
-  PostResetPassword
+  PostResetPassword,
+  HomePage,
+  collectionPage,
+  ProfileRedirect,
+  getEditProfile
 } from '../../controllers/auth.controller.js';
 
 const router = express.Router();
 
-/* LOGIN */
-router.get('/login', Login);
+/* ================= AUTH ================= */
 
-/* SIGNUP */
+router.route('/login')
+  .get(Login)
+  .post(PostLogin);
+
 router.route('/signup')
   .get(Signup)
   .post(PostSignup);
 
-/* SHARED OTP (Signup + Forgot) */
+/* ================= OTP ================= */
+
 router.route('/verify-otp')
   .get(VerifyOtpPage)
   .post(PostVerifyOtp);
 
-/* FORGOT PASSWORD */
+/* ================= FORGOT PASSWORD ================= */
+
 router.route('/forgot-password')
   .get(ForgotPassword)
   .post(PostForgotPassword);
 
-/* RESET PASSWORD */
 router.route('/reset-password')
   .get(ResetPasswordPage)
   .post(PostResetPassword);
+
+/* ================= PROTECTED PAGES ================= */
+
+router.route('/home')
+  .get(HomePage);
+
+router.route('/collections')
+  .get(collectionPage);
+
+router.route('/profile')
+  .get(ProfileRedirect);
+
+router.route('/profile/edit')
+  .get(getEditProfile);
 
 export default router;

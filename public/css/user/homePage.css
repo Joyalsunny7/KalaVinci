@@ -1,0 +1,266 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+}
+
+.hero-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;   
+  margin:0;
+  padding:0;            
+}
+
+
+.hero-banner {
+  position: relative;   
+  width: 95%;
+  max-width: 1400px;
+  background-size: cover;
+  background-position: center;
+}
+
+
+.hero-image {
+  display: block;           
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;           
+}
+
+.shop-all-btn {
+  position: absolute;              
+  bottom: 30px;
+  right: 40px;
+
+  background-color: #2d6a4f;
+  color: #fff;
+  padding: 14px 28px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+
+  border-radius: 2px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  z-index: 10;
+}
+
+
+.shop-all-btn:hover {
+  transform: translateY(-2px);
+}
+
+
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 10%;
+    text-align: center;
+    background: #fff;
+}
+
+.feature-item {
+    flex: 1;
+    padding: 20px;
+}
+
+.feature-item h3 {
+    font-size: 1rem;
+    margin: 10px 0;
+    text-transform: uppercase;
+}
+
+.feature-item p {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+
+.intro {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.shop-now-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: #888;
+}
+
+.intro h2 {
+    font-size: 2rem;
+    margin-top: 10px;
+}
+
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 0 5% 50px;
+}
+
+.art-card {
+    background: #fff;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.art-card img, .art-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    background-color: #f4f4f4;
+}
+
+.art-card h3 {
+    font-size: 0.9rem;
+    margin: 15px 0 5px;
+}
+
+.badge {
+    font-size: 0.65rem;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 2px 8px;
+    color: #888;
+}
+
+.card-btn {
+    font-size: 0.8rem;
+    color: #333;
+    text-decoration: underline;
+}
+
+
+.journey-section {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 80px 10%;
+    margin-top: 50px;
+}
+
+.journey-text {
+    flex: 1;
+    padding-right: 50px;
+}
+
+.journey-text h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.journey-text p {
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.btn-green {
+    background-color: #8fb695;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.journey-image {
+    flex: 1;
+}
+
+.journey-image img {
+    width: 100%;
+    box-shadow: 10px 10px 0px #eee;
+}
+
+
+.new-arrivals {
+    padding: 80px 5%;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 50px;
+}
+
+.arrivals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.product-card {
+    text-align: left;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.product-card h4 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.product-card p {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.price {
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+
+@media (max-width: 992px) {
+    .collection-grid, .arrivals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .journey-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    .journey-text {
+        padding-right: 0;
+        margin-bottom: 40px;
+    }
+     
+}
+
+@media (max-width: 768px) {
+  .shop-all-btn {
+    right: 20px;
+    bottom: 20px;
+    padding: 12px 20px;
+  }
+}

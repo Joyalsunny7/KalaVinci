@@ -1,0 +1,71 @@
+<%- include('../partials/header', { title: 'Login | Kala Vinci' }) %>
+
+<%- include('../partials/accountHeader') %>
+
+<link rel="stylesheet" href="/css/user/userProfile.css" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<main class="container main-layout">
+
+  <%- include('../partials/accountSidebar') %>
+
+
+  <section class="profile-content">
+
+    <div class="profile-card">
+
+      <!-- Avatar -->
+      <div class="profile-header">
+        <div class="profile-pic-container">
+          <div class="avatar-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <button class="add-photo-btn">
+            Add photo
+          </button>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form class="profile-form">
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" value="" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" value="" />
+        </div>
+
+        <div class="form-group">
+          <label for="name">Address</label>
+          <input type="text" id="name" value="" />
+        </div>
+
+        <div class="form-group">
+          <label for="mobile">Mobile</label>
+          <input type="text" id="mobile" value="" />
+        </div>
+
+        <div class="form-actions">
+          <a href="profile/edit" type="submit" class="save-btn">
+            Edit Changes
+          </a>
+        </div>
+
+      </form>
+
+    </div>
+  </section>
+
+</main>
+
+<%- include('../partials/footer') %>

@@ -3,14 +3,29 @@ import {
   verifyOtpAndSignup,
   sendForgotOtp,
   verifyForgototp,
-  resetPasswordService
+  resetPasswordService,
+  loginService
 } from '../services/userauth.service.js';
 
+// ================= AUTH PAGES ================= //
 
 export const Login = (req, res) => {
   res.render('users/login');
 };
 
+export const PostLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await loginService(email, password);
+
+    req.session.userId = user._id;
+
+    res.redirect('/home');
+  } catch (err) {
+    res.render('users/login', { error: err.message });
+  }
+};
 
 export const Signup = (req, res) => {
   res.render('users/signup');
@@ -25,23 +40,20 @@ export const PostSignup = async (req, res) => {
   }
 };
 
+// ================= OTP ================= //
+
 export const VerifyOtpPage = (req, res) => {
   if (!req.session.tempUser && !req.session.resetPassword) {
     return res.redirect('/login');
   }
 
-  let email = null;
-  if(req.session.tempUser){
-    email = req.session.tempUser.email
-  }
+  const email =
+    req.session.tempUser?.email ||
+    req.session.resetPassword?.email ||
+    null;
 
-  if(req.session.resetPassword){
-    email = req.session.resetPassword.email
-  }
-
-  res.render('users/verifyOtp',{email});
+  res.render('users/verifyOtp', { email });
 };
-
 
 export const PostVerifyOtp = async (req, res) => {
   try {
@@ -63,6 +75,7 @@ export const PostVerifyOtp = async (req, res) => {
   }
 };
 
+// ================= FORGOT PASSWORD ================= //
 
 export const ForgotPassword = (req, res) => {
   res.render('users/forgotPassword');
@@ -77,7 +90,6 @@ export const PostForgotPassword = async (req, res) => {
   }
 };
 
-
 export const ResetPasswordPage = (req, res) => {
   if (!req.session.resetPassword) {
     return res.redirect('/forgot-password');
@@ -85,7 +97,6 @@ export const ResetPasswordPage = (req, res) => {
 
   res.render('users/resetPassword');
 };
-
 
 export const PostResetPassword = async (req, res) => {
   try {
@@ -99,4 +110,38 @@ export const PostResetPassword = async (req, res) => {
   } catch (error) {
     res.render('users/resetPassword', { error: error.message });
   }
+};
+
+// ================= PROTECTED PAGES ================= //
+
+export const HomePage = (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  res.render('users/homePage');
+};
+
+export const collectionPage = (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  res.render('users/collections');
+};
+
+export const ProfileRedirect = (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  res.render('users/userProfile');
+};
+
+export const getEditProfile = (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+
+  res.render('users/editProfile');
 };

@@ -1,0 +1,126 @@
+<%- include('../partials/header', { title: 'Login | Kala Vinci' }) %>
+  <link rel="stylesheet" href="/css/user/collections.css">
+
+<div class="page-container">
+    <nav class="breadcrumbs">
+        <a href="#">Product</a> <span class="separator">›</span> <span class="current">Midnight Flowers Painting</span>
+    </nav>
+
+    <section class="product-main">
+        <div class="product-gallery">
+            <div class="main-img-box">
+                <img src="https://via.placeholder.com/600x800" alt="Midnight Flowers Painting">
+            </div>
+            <div class="carousel-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot active"></span>
+            </div>
+        </div>
+
+
+        <div class="product-info">
+            <div class="info-header">
+                <div class="share-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                </div>
+                <div class="meta-row">
+                    <div class="rating-badge">
+                        <span class="star">★</span> 4.2 — 54 Reviews
+                    </div>
+                    <span class="stock-badge">IN STOCK</span>
+                </div>
+                <h1 class="price">₹ 2,66,376</h1>
+            </div>
+
+            <div class="selectors">
+                <div class="select-group">
+                    <select>
+                        <option>SELECT SIZE</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <select>
+                        <option>SELECT TYPES</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="quantity-label">QUANTITY</div>
+            <div class="purchase-row">
+                <div class="quantity-selector">
+                    <button class="minus">−</button>
+                    <input type="text" value="1">
+                    <button class="plus">+</button>
+                </div>
+                <button class="add-to-cart">Add to cart</button>
+                <button class="wishlist">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+            </div>
+            <p class="shipping-info">— FREE SHIPPING ON ORDERS ₹ 9,999+</p>
+        </div>
+    </section>
+
+    <section class="details-section">
+        <aside class="tabs-nav">
+            <button class="tab-btn active">••• Details</button>
+            <button class="tab-btn">☆ Reviews</button>
+        </aside>
+        <article class="tab-content">
+            <h3>Detail</h3>
+            <p>"Midnight Flowers" is a visually striking and emotionally evocative piece that bursts with color and energy. The pointillism technique adds an extra layer of depth and texture, making it a truly eye-catcher. As you take a closer look at the painting, you begin to notice the intricate details of each individual dot, which together create a stunning visual experience. Deep Blue is contrasting with pops of vibrant red, orange, and yellow. The abstract flowers seem to glow with an otherworldly light, creating a sense of mystery and enchantment.</p>
+            <p>Technique: Finest acrylic paints on 4 cm deep canvas, finally finished with a neutral, semi-gloss varnish. The painting is ready to hang immediately. The sides are painted in white.</p>
+        </article>
+    </section>
+
+
+    <section class="similar-products">
+        <h2 class="section-title">You might also like</h2>
+        <p class="section-subtitle">SIMILAR PRODUCTS</p>
+        
+        <div class="products-grid">
+
+            <div class="p-card">
+                <div class="p-img"><img src="https://via.placeholder.com/300" alt="Art"></div>
+                <h4>Pixels Painiting</h4>
+                <div class="p-rating">★★★★☆</div>
+                <div class="p-footer">
+                    <span class="badge">IN STOCK</span>
+                    <span class="p-price"><span class="old">5,00,000</span> ₹ 2,38,032</span>
+                </div>
+            </div>
+
+            <div class="p-card">
+                <div class="p-img"><img src="https://via.placeholder.com/300" alt="Art"></div>
+                <h4>Rose Window</h4>
+                <div class="p-rating">★★★★☆</div>
+                <div class="p-footer">
+                    <span class="badge">IN STOCK</span>
+                    <span class="p-price"><span class="old">8,00,000</span> ₹ 4,29,458</span>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img"><img src="https://via.placeholder.com/300" alt="Art"></div>
+                <h4>Wild Summer Bloom</h4>
+                <div class="p-rating">★★★★☆</div>
+                <div class="p-footer">
+                    <span class="badge">IN STOCK</span>
+                    <span class="p-price"><span class="old">5,00,000</span> ₹ 2,44,666</span>
+                </div>
+            </div>
+            <div class="p-card">
+                <div class="p-img"><img src="https://via.placeholder.com/300" alt="Art"></div>
+                <h4>The Alchemy Of Joy Painting</h4>
+                <div class="p-rating">★★★★☆</div>
+                <div class="p-footer">
+                    <span class="badge">IN STOCK</span>
+                    <span class="p-price"><span class="old">5,00,000</span> ₹ 3,02,128</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<%- include('../partials/footer') %>
