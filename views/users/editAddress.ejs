@@ -1,0 +1,79 @@
+<%- include('../partials/header', { title: 'Edit Address | Kala Vinci' }) %>
+<link rel="stylesheet" href="/css/user/addaddress.css" />
+
+<div class="container">
+  <h1>Edit Address</h1>
+
+  <form
+    action="/address/edit/<%= address._id %>"
+    method="POST"
+    class="address-form"
+  >
+
+    <!-- Address Type -->
+    <select name="label" required>
+      <option value="">Select Address Type</option>
+      <option value="Home" <%= address.label === 'Home' ? 'selected' : '' %>>Home</option>
+      <option value="Office" <%= address.label === 'Office' ? 'selected' : '' %>>Office</option>
+      <option value="Work" <%= address.label === 'Work' ? 'selected' : '' %>>Work</option>
+    </select>
+
+    <!-- Name -->
+    <input
+      type="text"
+      name="name"
+      placeholder="Full Name"
+      value="<%= address.name %>"
+      required
+    />
+
+    <!-- Phone -->
+    <input
+      type="text"
+      name="phone"
+      placeholder="Phone Number"
+      value="<%= address.phone %>"
+      required
+    />
+
+    <!-- Address Line -->
+    <input
+      type="text"
+      name="addressLine"
+      placeholder="Address Line"
+      value="<%= address.addressLine %>"
+      required
+    />
+
+    <!-- City -->
+    <input
+      type="text"
+      name="city"
+      placeholder="City"
+      value="<%= address.city %>"
+      required
+    />
+
+    <!-- State -->
+    <input
+      type="text"
+      name="state"
+      placeholder="State"
+      value="<%= address.state %>"
+      required
+    />
+
+    <!-- Pincode -->
+    <input
+      type="text"
+      name="pincode"
+      placeholder="Pincode"
+      value="<%= address.pincode %>"
+      required
+    />
+
+    <button type="submit">Update Address</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

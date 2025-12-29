@@ -1,0 +1,218 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #4b5563;
+  margin: 0;
+}
+
+
+.main-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 40px 40px;
+  margin-top: 0;
+}
+
+
+
+.profile-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;  
+}
+
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+
+/* Header Styles */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+}
+
+.title-area h1 {
+    font-size: 24px;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.title-area p {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.add-address-btn {
+    background-color: #de836c; /* Salmon color from image */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.add-address-btn:hover {
+    background-color: #c9715a;
+}
+
+/* Grid Layout */
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* Card Styles */
+.address-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: #fff;
+}
+
+.default-border {
+    border-color: #de836c;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.address-card {
+  gap: 12px;
+}
+
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-title h2 {
+    font-size: 18px;
+    color: #1f2937;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    color: #6b7280;
+}
+
+.badge {
+    background-color: #de836c;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+}
+
+.card-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4b5563;
+    flex-grow: 1;
+}
+
+.card-content .name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #374151;
+}
+
+/* Footer & Actions */
+.card-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-link {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #4b5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.action-link.delete {
+    color: #ef4444; 
+}
+
+.small-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.divider {
+    color: #e5e7eb;
+    font-size: 14px;
+}
+
+.set-default {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: #9ca3af;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.set-default:hover {
+    color: #6b7280;
+}
+
+
+@media (max-width: 768px) {
+    .address-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .main-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

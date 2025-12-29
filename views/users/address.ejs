@@ -1,0 +1,80 @@
+<%- include('../partials/header', { title: 'My Addresses | Kala Vinci' }) %>
+<%- include('../partials/accountHeader') %>
+
+<link rel="stylesheet" href="/css/user/address.css">
+
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <%- include('../partials/accountSidebar') %>
+
+  <!-- MAIN CONTENT -->
+  <main class="profile-content">
+
+    <div class="container">
+
+      <!-- Header -->
+      <header class="main-header">
+        <div class="title-area">
+          <h1>Your Addresses</h1>
+          <p>Manage your shipping and billing locations.</p>
+        </div>
+
+        <a href="/address/add" class="add-address-btn">
+          <span>+</span> Add New Address
+        </a>
+      </header>
+
+      <!-- Address Grid -->
+      <div class="address-grid">
+
+        <% if (addresses.length === 0) { %>
+          <p>No address added yet.</p>
+        <% } %>
+
+        <% addresses.forEach(addr => { %>
+
+          <div class="address-card <%= addr.isDefault ? 'default-border' : '' %>">
+
+            <!-- HEADER -->
+            <div class="card-header">
+              <div class="card-title">
+                <h2><%= addr.label %></h2>
+              </div>
+
+              <% if (addr.isDefault) { %>
+                <span class="badge">DEFAULT</span>
+              <% } %>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="card-content">
+              <p class="name"><%= addr.name %></p>
+              <p><%= addr.addressLine %></p>
+              <p><%= addr.city %>, <%= addr.state %></p>
+              <p><%= addr.pincode %></p>
+              <p><%= addr.phone %></p>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="card-footer">
+              <div class="actions">
+                <a href="/address/edit/<%= addr._id %>" class="action-link">Edit</a>
+                <span class="divider">|</span>
+                <form action="/address/delete/<%= addr._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="action-link delete">Delete</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        <% }) %>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

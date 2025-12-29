@@ -1,13 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kala Vinci Admin Dashboard</title>
-    <link rel="stylesheet" href="/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/css/admin/admin-dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
 
     <!-- Sidebar -->
@@ -21,7 +22,13 @@
             <a href="#" class="nav-item active"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
             <a href="#" class="nav-item"><i class="fa-solid fa-box"></i> Products</a>
             <a href="#" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Orders</a>
-            <a href="#" class="nav-item"><i class="fa-solid fa-users"></i> Customers</a>
+            <li class="nav-item">
+                <a href="/admin/customers" class="nav-link">
+                    <i class="fa-solid fa-users nav-icon"></i>
+                    <span>Customers</span>
+                </a>
+            </li>
+
             <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Report</a>
             <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Coupons</a>
             <a href="#" class="nav-item"><i class="fa-solid fa-star"></i> Category</a>
@@ -80,7 +87,8 @@
                 <div class="card-subtitle">MONTHLY GOALS : 1,000</div>
                 <div class="card-value">86</div>
                 <div class="progress-container">
-                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-style: italic;">266 Left</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-style: italic;">
+                        266 Left</div>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
                     </div>
@@ -95,9 +103,11 @@
                 <div class="card-title">Best Selling</div>
                 <div class="card-subtitle">THIS MONTH</div>
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 16px -24px;">
-                
-                <div style="font-size: 24px; font-weight: 700; margin: 24px 0;">₹ 1200000 <span style="font-size: 12px; font-weight: 400; color: var(--text-secondary);">— Total Sales</span></div>
-                
+
+                <div style="font-size: 24px; font-weight: 700; margin: 24px 0;">₹ 1200000 <span
+                        style="font-size: 12px; font-weight: 400; color: var(--text-secondary);">— Total Sales</span>
+                </div>
+
                 <div class="best-selling-list">
                     <div class="selling-item">
                         <span>Metamorphosis Painting</span>
@@ -169,4 +179,5 @@
     </main>
 
 </body>
+
 </html>

@@ -1,0 +1,29 @@
+<%- include('../partials/header', { title: 'Address | Kala Vinci' }) %>
+    <link rel="stylesheet" href="/css/user/addaddress.css" />
+
+
+    <div class="container">
+        <h1>Add New Address</h1>
+
+        <form action="/address/add" method="POST" class="address-form">
+
+            <select name="label" required>
+                <option value="">Select Address Type</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+                <option value="Work">Work</option>
+            </select>
+
+            <input type="text" name="name" placeholder="Full Name" required />
+            <input type="text" name="phone" placeholder="Phone Number" required />
+            <input type="text" name="addressLine" placeholder="Address Line" required />
+            <input type="text" name="city" placeholder="City" required />
+            <input type="text" name="state" placeholder="State" required />
+            <input type="text" name="pincode" placeholder="Pincode" required />
+
+            <button type="submit">Save Address</button>
+        </form>
+    </div>
+
+
+    <%- include('../partials/footer') %>

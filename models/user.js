@@ -18,14 +18,22 @@ const userSchema = new Schema(
 
     phone: {
       type: String,
-      required: true,
-      trim: true,
+      required: function () {
+      return !this.googleId;
+    },
     },
 
     password: {
-      type: String,
-      required: true,
+     type: String,
+     required: function () {
+     return !this.googleId;
     },
+    },
+
+    googleId: {
+    type: String,
+    },
+
 
     otp: {
      type: String,
@@ -33,6 +41,16 @@ const userSchema = new Schema(
 
     otpExpiry: {
      type: Date,
+    },
+
+    profileImage: {
+     type: String,
+     default: null
+    },
+
+    isAdmin: {
+      type: Boolean,
+      default: false,  
     },
 
   },

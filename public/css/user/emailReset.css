@@ -1,0 +1,122 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+.card {
+    background-color: #ffffff;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+h2 {
+    color: #2d3748;
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.description {
+    color: #718096;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Form Elements */
+form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #2d3748;
+    transition: border-color 0.2s;
+}
+
+input::placeholder {
+    color: #a0aec0;
+}
+
+input:focus {
+    outline: none;
+    border-color: #cbd5e0;
+}
+
+
+input:disabled {
+    background-color: #f1f4f8;
+    color: #718096;
+    cursor: not-allowed;
+}
+
+
+.btn-update {
+    width: 100%;
+    background-color: #ec8e73; 
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 2px 4px rgba(236, 142, 115, 0.3);
+    transition: background-color 0.2s;
+}
+
+.btn-update:hover {
+    background-color: #e57d5f;
+}
+
+
+.footer-link {
+    margin-top: 25px;
+}
+
+.footer-link a {
+    color: #718096;
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+.footer-link a:hover {
+    color: #4a5568;
+}

@@ -1,67 +1,96 @@
-<%- include('../partials/header', { title: 'Login | Kala Vinci' }) %>
+<%- include('../partials/header', { title: 'Edit Profile | Kala Vinci' }) %>
+  <%- include('../partials/accountHeader') %>
 
-<%- include('../partials/accountHeader') %>
+    <link rel="stylesheet" href="/css/user/editprofile.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-<link rel="stylesheet" href="/css/user/userProfile.css" />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
+    <main class="container main-layout">
+      <%- include('../partials/accountSidebar') %>
 
-<main class="container main-layout">
+        <section class="profile-content">
+          <div class="profile-card">
 
-  <%- include('../partials/accountSidebar') %>
+            <!-- ONE FORM ONLY -->
+            <form action="/update" method="POST" enctype="multipart/form-data" id="editProfileForm">
 
+              <!-- ================= AVATAR ================= -->
+              <div class="profile-pic-container">
+                <div class="avatar-placeholder">
+                  <img id="profilePreview" src="<%= user.profileImage || '/images/default-avatar.png' %>"
+                    class="profile-avatar" alt="Profile Image" />
+                </div>
 
-  <section class="profile-content">
+                <input type="file" name="profileImage" id="profileImageInput" accept="image/*" hidden />
 
-    <div class="profile-card">
+                <button type="button" id="add-photo-btn">
+                  Add Photo
+                </button>
+              </div>
 
-      <!-- Avatar -->
-      <div class="profile-header">
-        <div class="profile-pic-container">
-          <div class="avatar-placeholder">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
+              <!-- ================= PROFILE FIELDS ================= -->
+              <div class="profile-form">
+
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" id="name" name="name" value="<%= user.full_name %>" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" value="<%= user.email %>" readonly />
+
+                  <button type="button" class="reset-email-btn" onclick="window.location.href='/reset-email'">
+                    Reset Email
+                  </button>
+                </div>
+
+                <div class="form-group">
+                  <label for="mobile">Mobile</label>
+                  <input type="text" id="mobile" name="mobile" value="<%= user.phone %>" required />
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="save-btn">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save Changes
+                  </button>
+                </div>
+
+              </div>
+            </form>
+
           </div>
-          <button class="add-photo-btn">
-            Add photo
-          </button>
-        </div>
-      </div>
+        </section>
+    </main>
 
-      <!-- Form -->
-      <form class="profile-form">
+    <%- include('../partials/footer') %>
 
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" value="" />
-        </div>
+      <script>
+        const fileInput = document.getElementById('profileImageInput');
+        const preview = document.getElementById('profilePreview');
+        const addPhotoBtn = document.getElementById('add-photo-btn');
+        const form = document.getElementById('editProfileForm');
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" value="" />
-        </div>
 
-        <div class="form-group">
-          <label for="mobile">Mobile</label>
-          <input type="text" id="mobile" value="" />
-        </div>
+        addPhotoBtn.addEventListener('click', () => {
+          fileInput.click();
+        });
 
-        <div class="form-actions">
-          <button type="submit" class="save-btn">
-            <i class="fa-solid fa-floppy-disk"></i>
-            Save Changes
-          </button>
-        </div>
+        form.addEventListener('submit', () => {
+          console.log('✅ FORM SUBMITTED');
+          console.log('Name:', document.getElementById('name').value);
+          console.log('Mobile:', document.getElementById('mobile').value);
+        });
 
-      </form>
+        fileInput.addEventListener('change', () => {
+          const file = fileInput.files[0];
+          if (!file) return;
 
-    </div>
-  </section>
-
-</main>
-
-<%- include('../partials/footer') %>
+          const reader = new FileReader();
+          reader.onload = () => {
+            preview.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      </script>

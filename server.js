@@ -7,7 +7,7 @@ import session from 'express-session';
 import './config/passport.js';
 import connectDB from './config/db.js';
 import { fileURLToPath } from 'url';
-
+import adminRoutes from './routes/authRoutes/adminRoutes.js'
 import authRoutes from './routes/authRoutes/authRoutes.js';
 import authgoogleroutes from './routes/authRoutes/googleAuthRoutes.js';
 
@@ -39,6 +39,9 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/auth',authgoogleroutes)
+app.use('/admin', adminRoutes)
+
+console.log("Admin routes mounted");
 
 
 await connectDB();

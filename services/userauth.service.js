@@ -3,39 +3,81 @@ import User from '../models/user.js';
 import { generateOtp } from './otp.services.js';
 import { sendOtpEmail } from './email.service.js';
 
-// ================= LOGIN ================= //
+// ================= LOGIN =================
 
 export const loginService = async (email, password) => {
   const user = await User.findOne({ email });
-  if (!user) {
-    throw new Error('Invalid email or password');
-  }
+  if (!user) throw new Error('Invalid email or password');
 
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error('Invalid email or password');
-  }
+  if (!isMatch) throw new Error('Invalid email or password');
 
   return user;
 };
 
-// ================= SIGNUP WITH OTP ================= //
+// ================= SIGNUP WITH OTP =================
 
 export const signupWithOtp = async (data, session) => {
-  const { name, email, password, phone } = data;
 
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    throw new Error('Email already registered');
-  }
+  const { name, email, phone, password } = data;
 
-  const otp = generateOtp();
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
   session.tempUser = {
     full_name: name,
     email,
-    password,
     phone,
+    password,
+    otp,
+    otpExpiry: Date.now() + 5 * 60 * 1000,
+  };
+
+  console.log("📦 TEMP USER SET:", session.tempUser);
+
+  await sendOtpEmail(email, otp);
+
+};
+
+
+// ================= VERIFY OTP & CREATE USER =================
+
+export const verifyOtpAndSignup = async (otp, session) => {
+
+
+  const tempUser = session.tempUser;
+
+  if (!tempUser) {
+    throw new Error('Session expired');
+  }
+
+
+  if (tempUser.otp !== otp) {
+    throw new Error('Invalid OTP');
+  }
+
+ const hashedPassword = await bcrypt.hash(tempUser.password, 10);
+  const user = new User({
+    full_name: tempUser.full_name,
+    email: tempUser.email,
+    phone: tempUser.phone,
+    password: hashedPassword,
+  });
+
+  await user.save(); 
+
+  session.tempUser = null;
+};
+
+
+
+// ================= FORGOT PASSWORD =================
+
+
+export const sendForgotOtp = async (email, session) => {
+  const otp = generateOtp();
+
+  session.resetPassword = {
+    email,
     otp,
     expiresAt: Date.now() + 5 * 60 * 1000, 
   };
@@ -43,79 +85,23 @@ export const signupWithOtp = async (data, session) => {
   await sendOtpEmail(email, otp);
 };
 
-// ================= VERIFY OTP & CREATE USER ================= //
-
-export const verifyOtpAndSignup = async (otp, session) => {
-  const tempUser = session.tempUser;
-  if (!tempUser) {
-    throw new Error('Session expired');
-  }
-
-  const isOtpValid =
-    otp == tempUser.otp && tempUser.expiresAt > Date.now();
-
-  if (!isOtpValid) {
-    throw new Error('Invalid or expired OTP');
-  }
-
-  const hashedPassword = await bcrypt.hash(tempUser.password, 10);
-
-  const user = await User.create({
-    full_name: tempUser.full_name,
-    email: tempUser.email,
-    password: hashedPassword,
-    phone: tempUser.phone,
-  });
-
-  session.tempUser = null;
-  return user;
-};
-
-// ================= FORGOT PASSWORD ================= //
-
-export const sendForgotOtp = async (email, session) => {
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new Error('Email is not registered');
-  }
-
-  const otp = generateOtp();
-
-  session.resetPassword = {
-    email,
-    otp,
-    expiresAt: Date.now() + 5 * 60 * 1000,
-  };
-
-  await sendOtpEmail(email, otp);
-};
-
 export const verifyForgototp = async (otp, session) => {
-  const resetData = session.resetPassword;
-  if (!resetData) {
-    throw new Error('OTP session expired');
-  }
+  const data = session.resetPassword;
+  if (!data) throw new Error('OTP session expired');
 
-  const isExpired = Date.now() > resetData.expiresAt;
-  const isInvalid = otp != resetData.otp;
-
-  if (isExpired || isInvalid) {
+  if (Date.now() > data.expiresAt || otp !== data.otp) {
     throw new Error('Invalid or expired OTP');
   }
 
-  return resetData.email;
+  return data.email;
 };
 
-// ================= RESET PASSWORD ================= //
+
+// ================= RESET PASSWORD =================
 
 export const resetPasswordService = async (email, password) => {
-  if (!email) {
-    throw new Error('Session expired');
-  }
-
-  if (!password) {
-    throw new Error('Password is required');
-  }
+  if (!email) throw new Error('Session expired');
+  if (!password) throw new Error('Password is required');
 
   const hashedPassword = await bcrypt.hash(password, 10);
 

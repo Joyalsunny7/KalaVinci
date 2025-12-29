@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin | Customers</title>
+    <link rel="stylesheet" href="/css/admin/customer.css" />
+</head>
+
+<body>
+
+    <%- include('../partials/admin/sidebar') %>
+        <main class="admin-content">
+
+            <h1>Customers</h1>
+
+            <form method="GET" class="table-controls">
+
+                <div class="search-box">
+                    <input type="text" name="search" placeholder="Search customers..." value="<%= search %>" />
+                    <% if (search) { %>
+                        <a href="/admin/customers" class="clear-btn">✕</a>
+                        <% } %>
+                </div>
+
+                <div class="filter-box">
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="desc" <%=sort==='desc' ? 'selected' : '' %>>
+                            Newest First
+                        </option>
+                        <option value="asc" <%=sort==='asc' ? 'selected' : '' %>>
+                            Oldest First
+                        </option>
+                    </select>
+                </div>
+
+            </form>
+
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Joined</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% customers.forEach(user=> { %>
+                        <tr>
+                            <td>
+                                <%= user.full_name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <%= user.phone || "-" %>
+                            </td>
+                            <td>
+                                <%= user.createdAt.toDateString() %>
+                            </td>
+
+                            <td>
+                                <span class="status <%= user.isBlocked ? 'blocked' : 'active' %>">
+                                    <%= user.isBlocked ? 'Blocked' : 'Active' %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <form method="POST" action="/admin/customers/block/<%= user._id %>">
+                                    <button class="block-btn <%= user.isBlocked ? 'unblock' : 'block' %>">
+                                        <%= user.isBlocked ? 'Unblock' : 'Block' %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+
+
+                <!-- Pagination Footer -->
+                <div class="pagination">
+
+                    <% if (currentPage> 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>" class="arrow">&lt;</a>
+                        <% } %>
+
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <a href="?page=<%= i %>" class="page <%= i === currentPage ? 'active' : '' %>">
+                                    <%= i %>
+                                </a>
+                                <% } %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <a href="?page=<%= currentPage + 1 %>" class="arrow">&gt;</a>
+                                        <% } %>
+
+                </div>
+
+
+        </main>
+</body>

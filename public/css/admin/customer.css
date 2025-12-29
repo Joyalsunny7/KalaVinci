@@ -1,0 +1,179 @@
+:root {
+  --border-color: #f0f0f0;
+  --text-main: #333;
+  --text-muted: #666;
+  --accent-blue: #e8f0fe;
+  --accent-text: #4285f4;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+/* MAIN CONTENT */
+.admin-content {
+  margin-left: 280px; /* sidebar width */
+  padding: 32px;
+}
+
+/* TABLE CONTAINER */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  font-size: 14px;
+}
+
+/* TABLE HEAD */
+.admin-table thead {
+  background-color: #fafafa;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 14px 20px;
+  color: #888;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* TABLE BODY */
+.admin-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f5f5f5;
+  color: var(--text-main);
+}
+
+.admin-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+
+.pagination .page,
+.pagination .arrow {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+
+  text-decoration: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+
+.pagination .page:hover,
+.pagination .arrow:hover {
+  background-color: #f3f4f6;
+  color: var(--text-main);
+}
+
+.pagination .page.active {
+  background-color: #f1f3f5;
+  border-color: var(--border-color);
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+
+.pagination .arrow {
+  font-size: 18px;
+  line-height: 1;
+}
+
+
+.pagination .disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* SEARCH + FILTER */
+.table-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  font-size: 14px;
+  color: #999;
+  text-decoration: none;
+}
+
+.filter-box select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* STATUS */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.status.active {
+  background: #e6f7ec;
+  color: #0f5132;
+}
+
+.status.blocked {
+  background: #fdecec;
+  color: #842029;
+}
+
+/* BLOCK BUTTON */
+.block-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+}
+
+.block-btn.block {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.block-btn.unblock {
+  background: #dcfce7;
+  color: #166534;
+}
