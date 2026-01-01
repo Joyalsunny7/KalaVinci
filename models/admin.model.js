@@ -46,7 +46,7 @@ const adminSchema = new Schema(
     isBlocked: {
     type: Boolean,
     default: false,
-},
+    },
 
 
   },

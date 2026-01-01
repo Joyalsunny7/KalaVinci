@@ -1,0 +1,75 @@
+<%- include('./partials/header', { title: 'Error | Kala Vinci' }) %>
+<link rel="stylesheet" href="/css/user/login.css">
+<style>
+    .error-container {
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+    .error-card {
+        background: white;
+        border-radius: 8px;
+        padding: 3rem;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .error-code {
+        font-size: 4rem;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-bottom: 1rem;
+    }
+    .error-message {
+        font-size: 1.25rem;
+        color: #333;
+        margin-bottom: 2rem;
+    }
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+    .btn {
+        padding: 0.75rem 2rem;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background: #545b62;
+    }
+</style>
+
+<main>
+    <div class="error-container">
+        <div class="error-card">
+            <div class="error-code"><%= statusCode || 500 %></div>
+            <div class="error-message">
+                <%= error || 'An unexpected error occurred' %>
+            </div>
+            <div class="error-actions">
+                <a href="/home" class="btn btn-primary">Go Home</a>
+                <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('./partials/footer') %>
+

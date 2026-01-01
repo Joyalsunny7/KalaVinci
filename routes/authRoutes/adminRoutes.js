@@ -4,7 +4,7 @@ import {
   AdminLogin,
   AdminDashboard,
   AdminCustomersPage,
-  toggleUserBlock
+  toggleBlockUser
 } from "../../controllers/admin.controller.js";
 
 import { adminAuth } from "../../middlewares/adminAuth.js";
@@ -19,6 +19,7 @@ router.route("/")
 router.get("/dashboard", adminAuth, AdminDashboard);
 
 router.get("/customers", adminAuth, AdminCustomersPage);
-router.post('/customers/block/:id',adminAuth,toggleUserBlock)
+
+router.post('/users/:userId/block-toggle',adminAuth,toggleBlockUser)
 
 export default router;

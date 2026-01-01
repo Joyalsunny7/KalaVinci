@@ -61,7 +61,7 @@
               <div class="actions">
                 <a href="/address/edit/<%= addr._id %>" class="action-link">Edit</a>
                 <span class="divider">|</span>
-                <form action="/address/delete/<%= addr._id %>" method="POST" style="display:inline;">
+                <form action="/address/delete/<%= addr._id %>" method="POST" style="display:inline;" class="delete-form" data-address-id="<%= addr._id %>">
                   <button type="submit" class="action-link delete">Delete</button>
                 </form>
               </div>
@@ -78,3 +78,16 @@
 </div>
 
 <%- include('../partials/footer') %>
+
+<script>
+  // Delete confirmation
+  document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      if (confirm('Are you sure you want to delete this address? This action cannot be undone.')) {
+        form.submit();
+      }
+    });
+  });
+</script>

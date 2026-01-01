@@ -6,26 +6,39 @@
 
     <div class="login-card">
 
-        <form class="signup-form" method="POST" action="/signup">
+        <form class="signup-form" method="POST" action="/signup" id="signupForm">
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="error-message">
+                    <%= error %>
+                </div>
+            <% } %>
 
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Enter your Fullname" required>
+                <input type="text" name="name" id="name" placeholder="Enter your Fullname" required>
+                <span class="error-text" id="nameError"></span>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                <span class="error-text" id="emailError"></span>
             </div>
 
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" placeholder="Enter your password" required>
+                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                <span class="error-text" id="passwordError"></span>
+                <small class="password-hint">
+                    Must be at least 8 characters with uppercase, lowercase, and number
+                </small>
             </div>
 
             <div class="form-group">
                 <label>Mobile</label>
-                <input type="tel" name="phone" placeholder="Enter your mobile number" required>
+                <input type="tel" name="phone" id="phone" placeholder="Enter your mobile number" required>
+                <span class="error-text" id="phoneError"></span>
             </div>
 
             <p class="disclaimer">
@@ -34,11 +47,133 @@
                 <strong>Privacy Policy</strong>.
             </p>
 
-            <button type="submit" class="submit-btn">
+            <button type="submit" class="submit-btn" id="submitBtn">
                 Create Account
             </button>
 
         </form>
+
+        <style>
+            .error-text {
+                color: #e74c3c;
+                font-size: 0.875rem;
+                display: block;
+                margin-top: 0.25rem;
+            }
+            .form-group input:invalid {
+                border-color: #e74c3c;
+            }
+            .form-group input:valid {
+                border-color: #27ae60;
+            }
+        </style>
+
+        <script>
+            const form = document.getElementById('signupForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const phoneInput = document.getElementById('phone');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Validation functions
+            function validateName(name) {
+                if (!name || name.trim().length < 2) {
+                    return 'Name must be at least 2 characters long';
+                }
+                if (name.trim().length > 50) {
+                    return 'Name must be less than 50 characters';
+                }
+                if (!/^[a-zA-Z\s]+$/.test(name.trim())) {
+                    return 'Name can only contain letters and spaces';
+                }
+                return '';
+            }
+
+            function validateEmail(email) {
+                if (!email) {
+                    return 'Email is required';
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    return 'Please enter a valid email address';
+                }
+                return '';
+            }
+
+            function validatePassword(password) {
+                if (!password) {
+                    return 'Password is required';
+                }
+                if (password.length < 8) {
+                    return 'Password must be at least 8 characters long';
+                }
+                if (!/(?=.*[a-z])/.test(password)) {
+                    return 'Password must contain at least one lowercase letter';
+                }
+                if (!/(?=.*[A-Z])/.test(password)) {
+                    return 'Password must contain at least one uppercase letter';
+                }
+                if (!/(?=.*\d)/.test(password)) {
+                    return 'Password must contain at least one number';
+                }
+                return '';
+            }
+
+            function validatePhone(phone) {
+                if (!phone) {
+                    return 'Phone number is required';
+                }
+                const phoneRegex = /^[6-9]\d{9}$/;
+                if (!phoneRegex.test(phone)) {
+                    return 'Please enter a valid 10-digit phone number';
+                }
+                return '';
+            }
+
+            // Real-time validation
+            nameInput.addEventListener('blur', () => {
+                const error = validateName(nameInput.value);
+                document.getElementById('nameError').textContent = error;
+            });
+
+            emailInput.addEventListener('blur', () => {
+                const error = validateEmail(emailInput.value);
+                document.getElementById('emailError').textContent = error;
+            });
+
+            passwordInput.addEventListener('blur', () => {
+                const error = validatePassword(passwordInput.value);
+                document.getElementById('passwordError').textContent = error;
+            });
+
+            phoneInput.addEventListener('blur', () => {
+                const error = validatePhone(phoneInput.value);
+                document.getElementById('phoneError').textContent = error;
+            });
+
+            // Form submission validation
+            form.addEventListener('submit', (e) => {
+                const nameError = validateName(nameInput.value);
+                const emailError = validateEmail(emailInput.value);
+                const passwordError = validatePassword(passwordInput.value);
+                const phoneError = validatePhone(phoneInput.value);
+
+                document.getElementById('nameError').textContent = nameError;
+                document.getElementById('emailError').textContent = emailError;
+                document.getElementById('passwordError').textContent = passwordError;
+                document.getElementById('phoneError').textContent = phoneError;
+
+                if (nameError || emailError || passwordError || phoneError) {
+                    e.preventDefault();
+                    submitBtn.disabled = false;
+                    return false;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creating Account...';
+            });
+        </script>
 
         <p class="signup-text">
             Already have an account?

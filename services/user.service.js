@@ -1,4 +1,5 @@
 import User from '../models/user.js';
+import { validateObjectId } from '../utils/validators.js';
 
 export const getUserById = async (userId) => {
   try {
@@ -6,12 +7,76 @@ export const getUserById = async (userId) => {
       throw new Error('User ID is required');
     }
 
-    const user = await User.findById(userId).lean()
+    const idValidation = validateObjectId(userId);
+    if (!idValidation.valid) {
+      throw new Error('Invalid user ID format');
+    }
+
+    const user = await User.findById(userId).lean();
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     return user;
   } catch (error) {
     throw error;
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -4,76 +4,249 @@
 <div class="container">
   <h1>Edit Address</h1>
 
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="error-message">
+      <%= error %>
+    </div>
+  <% } %>
+
   <form
     action="/address/edit/<%= address._id %>"
     method="POST"
     class="address-form"
+    id="addressForm"
   >
 
-    <!-- Address Type -->
-    <select name="label" required>
-      <option value="">Select Address Type</option>
-      <option value="Home" <%= address.label === 'Home' ? 'selected' : '' %>>Home</option>
-      <option value="Office" <%= address.label === 'Office' ? 'selected' : '' %>>Office</option>
-      <option value="Work" <%= address.label === 'Work' ? 'selected' : '' %>>Work</option>
-    </select>
+    <div class="form-group">
+      <select name="label" id="label" required>
+        <option value="">Select Address Type</option>
+        <option value="Home" <%= address.label === 'Home' ? 'selected' : '' %>>Home</option>
+        <option value="Office" <%= address.label === 'Office' ? 'selected' : '' %>>Office</option>
+        <option value="Work" <%= address.label === 'Work' ? 'selected' : '' %>>Work</option>
+      </select>
+      <span class="error-text" id="labelError"></span>
+    </div>
 
-    <!-- Name -->
-    <input
-      type="text"
-      name="name"
-      placeholder="Full Name"
-      value="<%= address.name %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="name"
+        id="name"
+        placeholder="Full Name"
+        value="<%= address.name %>"
+        required
+      />
+      <span class="error-text" id="nameError"></span>
+    </div>
 
-    <!-- Phone -->
-    <input
-      type="text"
-      name="phone"
-      placeholder="Phone Number"
-      value="<%= address.phone %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="phone"
+        id="phone"
+        placeholder="Phone Number"
+        value="<%= address.phone %>"
+        required
+      />
+      <span class="error-text" id="phoneError"></span>
+    </div>
 
-    <!-- Address Line -->
-    <input
-      type="text"
-      name="addressLine"
-      placeholder="Address Line"
-      value="<%= address.addressLine %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="addressLine"
+        id="addressLine"
+        placeholder="Address Line"
+        value="<%= address.addressLine %>"
+        required
+      />
+      <span class="error-text" id="addressLineError"></span>
+    </div>
 
-    <!-- City -->
-    <input
-      type="text"
-      name="city"
-      placeholder="City"
-      value="<%= address.city %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="city"
+        id="city"
+        placeholder="City"
+        value="<%= address.city %>"
+        required
+      />
+      <span class="error-text" id="cityError"></span>
+    </div>
 
-    <!-- State -->
-    <input
-      type="text"
-      name="state"
-      placeholder="State"
-      value="<%= address.state %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="state"
+        id="state"
+        placeholder="State"
+        value="<%= address.state %>"
+        required
+      />
+      <span class="error-text" id="stateError"></span>
+    </div>
 
-    <!-- Pincode -->
-    <input
-      type="text"
-      name="pincode"
-      placeholder="Pincode"
-      value="<%= address.pincode %>"
-      required
-    />
+    <div class="form-group">
+      <input
+        type="text"
+        name="pincode"
+        id="pincode"
+        placeholder="Pincode"
+        value="<%= address.pincode %>"
+        required
+        maxlength="6"
+      />
+      <span class="error-text" id="pincodeError"></span>
+    </div>
 
-    <button type="submit">Update Address</button>
+    <button type="submit" id="submitBtn">Update Address</button>
   </form>
+
+  <style>
+    .error-text {
+      color: #e74c3c;
+      font-size: 0.875rem;
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <script>
+    const form = document.getElementById('addressForm');
+    const labelInput = document.getElementById('label');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+    const addressLineInput = document.getElementById('addressLine');
+    const cityInput = document.getElementById('city');
+    const stateInput = document.getElementById('state');
+    const pincodeInput = document.getElementById('pincode');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Validation functions (same as addAddress)
+    function validateLabel(label) {
+      if (!label || !['Home', 'Office', 'Work'].includes(label)) {
+        return 'Please select a valid address type';
+      }
+      return '';
+    }
+
+    function validateName(name) {
+      if (!name || name.trim().length < 2) {
+        return 'Name must be at least 2 characters long';
+      }
+      return '';
+    }
+
+    function validatePhone(phone) {
+      if (!phone) {
+        return 'Phone number is required';
+      }
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (!phoneRegex.test(phone)) {
+        return 'Please enter a valid 10-digit phone number';
+      }
+      return '';
+    }
+
+    function validateAddressLine(addressLine) {
+      if (!addressLine || addressLine.trim().length < 5) {
+        return 'Address must be at least 5 characters long';
+      }
+      return '';
+    }
+
+    function validateCity(city) {
+      if (!city || city.trim().length < 2) {
+        return 'City is required';
+      }
+      return '';
+    }
+
+    function validateState(state) {
+      if (!state || state.trim().length < 2) {
+        return 'State is required';
+      }
+      return '';
+    }
+
+    function validatePincode(pincode) {
+      if (!pincode) {
+        return 'Pincode is required';
+      }
+      const pincodeRegex = /^\d{6}$/;
+      if (!pincodeRegex.test(pincode)) {
+        return 'Pincode must be 6 digits';
+      }
+      return '';
+    }
+
+    // Real-time validation
+    labelInput.addEventListener('change', () => {
+      document.getElementById('labelError').textContent = validateLabel(labelInput.value);
+    });
+
+    nameInput.addEventListener('blur', () => {
+      document.getElementById('nameError').textContent = validateName(nameInput.value);
+    });
+
+    phoneInput.addEventListener('blur', () => {
+      document.getElementById('phoneError').textContent = validatePhone(phoneInput.value);
+    });
+    phoneInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    });
+
+    addressLineInput.addEventListener('blur', () => {
+      document.getElementById('addressLineError').textContent = validateAddressLine(addressLineInput.value);
+    });
+
+    cityInput.addEventListener('blur', () => {
+      document.getElementById('cityError').textContent = validateCity(cityInput.value);
+    });
+
+    stateInput.addEventListener('blur', () => {
+      document.getElementById('stateError').textContent = validateState(stateInput.value);
+    });
+
+    pincodeInput.addEventListener('blur', () => {
+      document.getElementById('pincodeError').textContent = validatePincode(pincodeInput.value);
+    });
+    pincodeInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', (e) => {
+      const labelError = validateLabel(labelInput.value);
+      const nameError = validateName(nameInput.value);
+      const phoneError = validatePhone(phoneInput.value);
+      const addressLineError = validateAddressLine(addressLineInput.value);
+      const cityError = validateCity(cityInput.value);
+      const stateError = validateState(stateInput.value);
+      const pincodeError = validatePincode(pincodeInput.value);
+
+      document.getElementById('labelError').textContent = labelError;
+      document.getElementById('nameError').textContent = nameError;
+      document.getElementById('phoneError').textContent = phoneError;
+      document.getElementById('addressLineError').textContent = addressLineError;
+      document.getElementById('cityError').textContent = cityError;
+      document.getElementById('stateError').textContent = stateError;
+      document.getElementById('pincodeError').textContent = pincodeError;
+
+      if (labelError || nameError || phoneError || addressLineError || cityError || stateError || pincodeError) {
+        e.preventDefault();
+        submitBtn.disabled = false;
+        return false;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Updating...';
+    });
+  </script>
 </div>
 
 <%- include('../partials/footer') %>

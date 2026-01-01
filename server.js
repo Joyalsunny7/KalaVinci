@@ -1,5 +1,6 @@
 import 'dotenv/config';
-
+import { checkBlocked, Toasted } from './middlewares/adminAuth.js';
+import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 import express from 'express';
 import path from 'path';
 import passport from 'passport';
@@ -8,7 +9,7 @@ import './config/passport.js';
 import connectDB from './config/db.js';
 import { fileURLToPath } from 'url';
 import adminRoutes from './routes/authRoutes/adminRoutes.js'
-import authRoutes from './routes/authRoutes/authRoutes.js';
+import userRoutes from './routes/authRoutes/userRoutes.js';
 import authgoogleroutes from './routes/authRoutes/googleAuthRoutes.js';
 
 const app = express();
@@ -37,9 +38,18 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', authRoutes);
-app.use('/auth',authgoogleroutes)
-app.use('/admin', adminRoutes)
+
+app.use(checkBlocked);
+app.use(Toasted);
+app.use('/', userRoutes);
+app.use('/auth', authgoogleroutes);
+app.use('/admin', adminRoutes);
+
+// 404 handler - must be after all routes
+app.use(notFoundHandler);
+
+// Error handler - must be last
+app.use(errorHandler);
 
 console.log("Admin routes mounted");
 

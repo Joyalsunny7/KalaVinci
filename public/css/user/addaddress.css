@@ -34,6 +34,35 @@ body {
   grid-column: span 2;
 }
 
+/* Form Group */
+.address-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Select Dropdown */
+.address-form select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.address-form select:focus {
+  outline: none;
+  border-color: #de836c;
+  box-shadow: 0 0 0 3px rgba(222, 131, 108, 0.15);
+}
+
 /* Inputs */
 .address-form input {
   width: 100%;
@@ -56,6 +85,33 @@ body {
   box-shadow: 0 0 0 3px rgba(222, 131, 108, 0.15);
 }
 
+.address-form input:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
+
+.address-form input:invalid:not(:placeholder-shown) {
+  border-color: #ef4444;
+}
+
+/* Error Messages */
+.error-text {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 6px;
+  display: block;
+  min-height: 18px;
+}
+
+.error-message {
+  color: #ef4444;
+  background-color: #fee2e2;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ef4444;
+}
+
 /* Submit button */
 .address-form button {
   grid-column: span 2;
@@ -73,6 +129,11 @@ body {
 
 .address-form button:hover {
   background-color: #c9715a;
+}
+
+.address-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Mobile */

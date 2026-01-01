@@ -1,6 +1,9 @@
 import { adminLoginService,
-         getAllCustomersService
+         getAllCustomersService,
+         toggleBlockUserService
  } from "../services/admin.service.js";
+import { validateEmail, validateObjectId } from "../utils/validators.js";
+import { sanitizeInput } from "../utils/validators.js";
 
 
 
@@ -17,16 +20,25 @@ export const AdminLoginPage = (req, res) => {
 // ================= admin verification ================= //
 
 export const AdminLogin = async (req, res) => {
-
-
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      throw new Error("Email or password missing");
+      return res.render("admin/login", {
+        error: "Email and password are required",
+      });
     }
 
-    const admin = await adminLoginService(email, password);
+
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.valid) {
+      return res.render("admin/login", {
+        error: emailValidation.message,
+      });
+    }
+
+    const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
+    const admin = await adminLoginService(sanitizedEmail, password);
 
     req.session.adminId = admin._id;
 
@@ -50,12 +62,10 @@ export const AdminDashboard = (req, res) => {
 // ================= admin customer page ================= //
 export const AdminCustomersPage = async (req, res) => {
   try {
-    console.log("📥 AdminCustomersPage HIT");
-
-    const page = parseInt(req.query.page) || 1;
+    const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = 10;
-    const search = req.query.search || "";
-    const sort = req.query.sort || "desc";
+    const search = sanitizeInput(req.query.search || "");
+    const sort = req.query.sort === "asc" ? "asc" : "desc";
 
     const { customers, totalUsers } =
       await getAllCustomersService({
@@ -89,20 +99,35 @@ export const AdminCustomersPage = async (req, res) => {
 
 // ================= block or unblock user ================= //
 
-export const toggleUserBlock = async (req, res) => {
+export const toggleBlockUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.redirect("/admin/customers");
+    const { userId } = req.params;
 
-    user.isBlocked = !user.isBlocked;
-    await user.save();
+    
+    const idValidation = validateObjectId(userId);
+    if (!idValidation.valid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID format"
+      });
+    }
 
-    res.redirect("/admin/customers");
-  } catch (err) {
-    console.error("BLOCK USER ERROR:", err);
-    res.redirect("/admin/customers");
+    const user = await toggleBlockUserService(userId);
+
+    return res.status(200).json({
+      success: true,
+      isBlocked: user.isBlocked
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message
+    });
   }
 };
+
+
+
 
 
 

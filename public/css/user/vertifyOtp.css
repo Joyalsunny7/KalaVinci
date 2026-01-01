@@ -98,15 +98,36 @@
 }
 
 .resend-btn {
-  background: none;
-  border: none;
+  background: transparent;
+  border: 1px solid var(--primary);
   color: var(--primary);
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.resend-btn:hover {
-  text-decoration: underline;
+.resend-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.resend-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+  color: #9ca3af;
+}
+
+#timer {
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
 .timer {
@@ -138,6 +159,28 @@
   background: var(--primary-hover);
 }
 
+.verify-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#otpError {
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
+  margin: 16px 0;
+  padding: 12px;
+  background: #fee2e2;
+  border-radius: 8px;
+  border-left: 4px solid #ef4444;
+}
+
+#otpError[style*="color: green"] {
+  color: #10b981 !important;
+  background: #d1fae5;
+  border-left-color: #10b981;
+}
+
 
 .back-link {
   display: flex;
@@ -155,21 +198,5 @@
   color: var(--text-muted);
 }
 
-.otp-inputs {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
-.otp-input {
-  width: 56px;
-  height: 64px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-}
+/* Remove duplicate - already defined above */
 

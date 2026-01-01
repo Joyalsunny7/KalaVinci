@@ -15,23 +15,31 @@
 </p>
 
 <% if (typeof error !== 'undefined') { %>
-  <p style="color:red;"><%= error %></p>
+  <p style="color:red; margin: 1rem 0;"><%= error %></p>
 <% } %>
 
-<form method="POST" action="/verify-otp">
+<form method="POST" action="/verify-otp" id="otpForm">
   <div class="otp-inputs">
     <% for (let i = 0; i < 6; i++) { %>
-      <input type="text" maxlength="1" class="otp-input" />
+      <input type="text" maxlength="1" class="otp-input" data-index="<%= i %>" />
     <% } %>
   </div>
 
   <input type="hidden" name="otp" id="otpHidden" />
 
-  <button type="submit" class="verify-btn">
+  <div id="otpError" style="color: red; margin: 1rem 0; display: none;"></div>
+
+  <button type="submit" class="verify-btn" id="verifyBtn">
     Verify & Proceed
   </button>
 </form>
 
+<div style="margin: 1.5rem 0; text-align: center;">
+  <p style="margin-bottom: 0.5rem;">Didn't receive the code?</p>
+  <button type="button" id="resendBtn" class="resend-btn" disabled>
+    Resend OTP (<span id="timer">00:00</span>)
+  </button>
+</div>
 
         <a href="/login" class="back-link">Back to Login</a>
 
@@ -42,17 +50,158 @@
 
 <%- include('../partials/footer') %>
 
+<style>
+  .resend-btn {
+    background: transparent;
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+  }
+  .resend-btn:hover:not(:disabled) {
+    background: #007bff;
+    color: white;
+  }
+  .resend-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+</style>
+
 <script>
   const inputs = document.querySelectorAll('.otp-input');
   const hiddenOtp = document.getElementById('otpHidden');
+  const otpForm = document.getElementById('otpForm');
+  const resendBtn = document.getElementById('resendBtn');
+  const timerDisplay = document.getElementById('timer');
+  const otpError = document.getElementById('otpError');
+  const verifyBtn = document.getElementById('verifyBtn');
 
+  // Timer setup
+  let timeLeft = <%= remainingTime || 300 %>; // 5 minutes default
+  let timerInterval;
+
+  function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      resendBtn.disabled = false;
+      resendBtn.innerHTML = 'Resend OTP';
+      timerDisplay.textContent = '';
+    } else {
+      timeLeft--;
+    }
+  }
+
+  // Start timer
+  if (timeLeft > 0) {
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+  } else {
+    resendBtn.disabled = false;
+    resendBtn.innerHTML = 'Resend OTP';
+    timerDisplay.textContent = '';
+  }
+
+  // OTP input handling
   inputs.forEach((input, index) => {
-    input.addEventListener('input', () => {
+    input.addEventListener('input', (e) => {
       input.value = input.value.replace(/[^0-9]/g, '');
       if (input.value && index < inputs.length - 1) {
         inputs[index + 1].focus();
       }
       hiddenOtp.value = Array.from(inputs).map(i => i.value).join('');
+      otpError.style.display = 'none';
     });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+      pastedData.split('').forEach((char, i) => {
+        if (inputs[i]) {
+          inputs[i].value = char;
+        }
+      });
+      hiddenOtp.value = Array.from(inputs).map(i => i.value).join('');
+      if (inputs[pastedData.length - 1]) {
+        inputs[pastedData.length - 1].focus();
+      }
+    });
+  });
+
+  // Form validation
+  otpForm.addEventListener('submit', (e) => {
+    const otpValue = hiddenOtp.value;
+    if (!otpValue || otpValue.length !== 6) {
+      e.preventDefault();
+      otpError.textContent = 'Please enter a valid 6-digit OTP';
+      otpError.style.display = 'block';
+      return false;
+    }
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'Verifying...';
+  });
+
+  // Resend OTP
+  resendBtn.addEventListener('click', async () => {
+    if (resendBtn.disabled) return;
+
+    resendBtn.disabled = true;
+    resendBtn.innerHTML = 'Sending...';
+
+    try {
+      const response = await fetch('/resend-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Reset timer
+        timeLeft = data.remainingTime || 300;
+        clearInterval(timerInterval);
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+
+        // Clear OTP inputs
+        inputs.forEach(input => input.value = '');
+        hiddenOtp.value = '';
+        inputs[0].focus();
+
+        // Show success message
+        otpError.style.color = 'green';
+        otpError.textContent = 'OTP resent successfully!';
+        otpError.style.display = 'block';
+        setTimeout(() => {
+          otpError.style.display = 'none';
+          otpError.style.color = 'red';
+        }, 3000);
+      } else {
+        otpError.textContent = data.message || 'Failed to resend OTP';
+        otpError.style.display = 'block';
+        resendBtn.disabled = false;
+        resendBtn.innerHTML = 'Resend OTP';
+      }
+    } catch (error) {
+      otpError.textContent = 'Failed to resend OTP. Please try again.';
+      otpError.style.display = 'block';
+      resendBtn.disabled = false;
+      resendBtn.innerHTML = 'Resend OTP';
+    }
   });
 </script>

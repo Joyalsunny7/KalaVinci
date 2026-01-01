@@ -72,12 +72,9 @@
                             </td>
 
                             <td>
-                                <form method="POST" action="/admin/customers/block/<%= user._id %>">
-                                    <button class="block-btn <%= user.isBlocked ? 'unblock' : 'block' %>">
-                                        <%= user.isBlocked ? 'Unblock' : 'Block' %>
-                                    </button>
-                                </form>
+                                <button type="button" class="block-btn" data-user-id="<%= user._id %>">
                             </td>
+
                         </tr>
                         <% }) %>
                 </tbody>
@@ -104,4 +101,26 @@
 
 
         </main>
+      <script>
+  document.querySelectorAll('.block-btn').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const userId = button.dataset.userId;
+
+      const res = await fetch(`/admin/users/${userId}/block-toggle`, {
+        method: 'POST'
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Block failed');
+      }
+    });
+  });
+</script>
+
 </body>

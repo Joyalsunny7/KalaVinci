@@ -30,9 +30,11 @@ import {
   editAddressPage,
   updateAddress,
   addressPage,
-  deleteAddress
-} from '../../controllers/auth.controller.js';
+  deleteAddress,
+  resendOtp
+} from '../../controllers/user.controller.js';
 import {uploadProfilePhoto} from '../../config/multer.js';
+import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
 const router = express.Router();
 
 /* ================= AUTH ================= */
@@ -50,6 +52,9 @@ router.route('/signup')
 router.route('/verify-otp')
   .get(VerifyOtpPage)
   .post(PostVerifyOtp);
+
+router.route('/resend-otp')
+  .post(resendOtp);
 
 /* ================= FORGOT PASSWORD ================= */
 
@@ -77,11 +82,13 @@ router.route('/profile')
 router.route('/edit')
   .get(getEditProfile);
 
-router.route('/photo')
-  .post(uploadProfilePhoto.single('profileImage'));
+// Photo upload route removed - handled in update route
 
 router.route('/update')
-  .post(uploadProfilePhoto.single('profileImage'),updateProfile );
+  .post(
+    handleMulterUpload(uploadProfilePhoto.single('profileImage')),
+    updateProfile
+  );
 
 //==============email===============//
 

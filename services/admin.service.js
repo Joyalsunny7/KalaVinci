@@ -1,10 +1,19 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
+import { validateEmail, validateObjectId } from "../utils/validators.js";
 
 
 export const adminLoginService = async (email, password) => {
-  const user = await User.findOne({ email });
+  if (!email || !password) {
+    throw new Error("Email and password are required");
+  }
 
+  const emailValidation = validateEmail(email);
+  if (!emailValidation.valid) {
+    throw new Error(emailValidation.message);
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
 
   if (!user) {
     throw new Error("Admin not found");
@@ -14,8 +23,16 @@ export const adminLoginService = async (email, password) => {
     throw new Error("Unauthorized admin access");
   }
 
-  if (user.googleId) {
+  if (user.isBlocked) {
+    throw new Error("Admin account is blocked");
+  }
+
+  if (user.googleId && !user.password) {
     return user;
+  }
+
+  if (!user.password) {
+    throw new Error("Invalid credentials");
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -66,6 +83,30 @@ export const getAllCustomersService = async ({
     totalUsers,
   };
 };
+
+
+export const toggleBlockUserService = async (userId) => {
+  const idValidation = validateObjectId(userId);
+  if (!idValidation.valid) {
+    throw new Error('Invalid user ID format');
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  if (user.isAdmin) {
+    throw new Error('Admin cannot be blocked');
+  }
+
+  user.isBlocked = !user.isBlocked;
+  await user.save();
+
+  return user;
+};
+
 
 
 

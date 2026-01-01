@@ -179,7 +179,22 @@ body {
 }
 
 .action-link.delete {
-    color: #ef4444; 
+    color: #ef4444;
+    transition: color 0.2s ease;
+}
+
+.action-link.delete:hover {
+    color: #dc2626;
+    text-decoration: underline;
+}
+
+.action-link {
+    transition: color 0.2s ease;
+}
+
+.action-link:hover {
+    color: #1f2937;
+    text-decoration: underline;
 }
 
 .small-icon {

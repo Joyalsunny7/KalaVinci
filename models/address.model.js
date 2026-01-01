@@ -17,6 +17,12 @@ const addressSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
+      validate: {
+        validator: function(v) {
+          return /^[6-9]\d{9}$/.test(v);
+        },
+        message: 'Please enter a valid 10-digit phone number'
+      }
     },
 
     addressLine: {
@@ -37,6 +43,12 @@ const addressSchema = new mongoose.Schema(
     pincode: {
       type: String,
       required: true,
+      validate: {
+        validator: function(v) {
+          return /^\d{6}$/.test(v);
+        },
+        message: 'Pincode must be 6 digits'
+      }
     },
 
     isDefault: {
