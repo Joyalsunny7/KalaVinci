@@ -26,14 +26,31 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
+
 
 app.use(
   session({
     secret: 'kala-vinci-secret',
     resave: false,
     saveUninitialized: false,
-  })
+    
+    cookie: {
+      httpOnly: true,
+      secure: false,       
+      sameSite: 'lax',      
+      maxAge: 1000 * 60 * 60 * 60, 
+    },
+  }),
+  
 );
+
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,10 +62,8 @@ app.use('/', userRoutes);
 app.use('/auth', authgoogleroutes);
 app.use('/admin', adminRoutes);
 
-// 404 handler - must be after all routes
-app.use(notFoundHandler);
 
-// Error handler - must be last
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 console.log("Admin routes mounted");

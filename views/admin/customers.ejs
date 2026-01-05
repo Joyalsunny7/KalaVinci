@@ -12,12 +12,12 @@
     <%- include('../partials/admin/sidebar') %>
         <main class="admin-content">
 
-            <h1>Customers</h1>
+            <h1>Users</h1>
 
             <form method="GET" class="table-controls">
 
                 <div class="search-box">
-                    <input type="text" name="search" placeholder="Search customers..." value="<%= search %>" />
+                    <input type="text" name="search" placeholder="Search users..." value="<%= search %>" />
                     <% if (search) { %>
                         <a href="/admin/customers" class="clear-btn">✕</a>
                         <% } %>
@@ -72,55 +72,64 @@
                             </td>
 
                             <td>
-                                <button type="button" class="block-btn" data-user-id="<%= user._id %>">
+                                <label class="switch">
+                                    <input type="checkbox" class="block-toggle" data-user-id="<%= user._id %>"
+                                        <%=user.isBlocked ? '' : 'checked' %>
+                                    >
+                                    <span class="slider"></span>
+                                </label>
                             </td>
+
 
                         </tr>
                         <% }) %>
                 </tbody>
+            </table>
 
+            <!-- Pagination Footer -->
+            <div class="pagination">
 
-                <!-- Pagination Footer -->
-                <div class="pagination">
+                <% if (currentPage> 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>" class="arrow">&lt;</a>
+                    <% } %>
 
-                    <% if (currentPage> 1) { %>
-                        <a href="?page=<%= currentPage - 1 %>" class="arrow">&lt;</a>
-                        <% } %>
+                        <% for (let i=1; i <=totalPages; i++) { %>
+                            <a href="?page=<%= i %>" class="page <%= i === currentPage ? 'active' : '' %>">
+                                <%= i %>
+                            </a>
+                            <% } %>
 
-                            <% for (let i=1; i <=totalPages; i++) { %>
-                                <a href="?page=<%= i %>" class="page <%= i === currentPage ? 'active' : '' %>">
-                                    <%= i %>
-                                </a>
-                                <% } %>
+                                <% if (currentPage < totalPages) { %>
+                                    <a href="?page=<%= currentPage + 1 %>" class="arrow">&gt;</a>
+                                    <% } %>
 
-                                    <% if (currentPage < totalPages) { %>
-                                        <a href="?page=<%= currentPage + 1 %>" class="arrow">&gt;</a>
-                                        <% } %>
-
-                </div>
+            </div>
 
 
         </main>
-      <script>
-  document.querySelectorAll('.block-btn').forEach(button => {
-    button.addEventListener('click', async (e) => {
-      e.preventDefault();
+        <script>
+            document.querySelectorAll('.block-toggle').forEach(toggle => {
+                toggle.addEventListener('change', async () => {
+                    const userId = toggle.dataset.userId;
 
-      const userId = button.dataset.userId;
+                    try {
+                        const res = await fetch(`/admin/users/${userId}/toggle-block`, {
+                            method: 'PATCH'
+                        });
 
-      const res = await fetch(`/admin/users/${userId}/block-toggle`, {
-        method: 'POST'
-      });
+                        const data = await res.json();
 
-      const data = await res.json();
+                        if (!data.success) {
+                            toggle.checked = !toggle.checked;
+                            alert(data.message || 'Action failed');
+                        }
+                    } catch (err) {
+                        toggle.checked = !toggle.checked;
+                        alert('Server error');
+                    }
+                });
+            });
+        </script>
 
-      if (data.success) {
-        location.reload();
-      } else {
-        alert('Block failed');
-      }
-    });
-  });
-</script>
 
 </body>

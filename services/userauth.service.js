@@ -65,13 +65,13 @@ export const signupWithOtp = async (data, session) => {
     throw new Error(passwordValidation.message);
   }
 
-  // Check if email already exists
+  
   const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
   if (existingUser) {
     throw new Error('Email is already registered');
   }
 
-  // Check if phone already exists
+  
   const existingPhone = await User.findOne({ phone });
   if (existingPhone) {
     throw new Error('Phone number is already registered');
@@ -101,7 +101,7 @@ export const verifyOtpAndSignup = async (otp, session) => {
     throw new Error('Session expired. Please sign up again.');
   }
 
-  // Check OTP expiry
+
   if (Date.now() > tempUser.otpExpiry) {
     session.tempUser = null;
     throw new Error('OTP has expired. Please request a new one.');
@@ -111,7 +111,7 @@ export const verifyOtpAndSignup = async (otp, session) => {
     throw new Error('Invalid OTP');
   }
 
-  // Check if email was registered during OTP wait time
+  
   const existingUser = await User.findOne({ email: tempUser.email });
   if (existingUser) {
     session.tempUser = null;
@@ -143,7 +143,6 @@ export const sendForgotOtp = async (email, session) => {
 
   const normalizedEmail = email.toLowerCase().trim();
   
-  // Check if user exists (for password reset)
   if (session.resetPassword || (!session.emailReset && !session.tempUser)) {
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
@@ -157,13 +156,13 @@ export const sendForgotOtp = async (email, session) => {
 
   const otp = generateOtp();
 
-  // Determine which session object to use
+  
   if (session.emailReset) {
-    // For email reset flow
+  
     session.emailReset.otp = otp;
     session.emailReset.otpExpiry = Date.now() + 5 * 60 * 1000;
   } else {
-    // For password reset flow
+    
     session.resetPassword = {
       email: normalizedEmail,
       otp,

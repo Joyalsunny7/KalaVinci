@@ -279,3 +279,67 @@ td {
     text-decoration: none;
     color: inherit;
 }
+
+/* ================= STANDALONE SIDEBAR LINK ================= */
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 0 16px 6px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-icon {
+  font-size: 18px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.sidebar-text {
+  white-space: nowrap;
+}
+
+.sidebar-link:hover {
+  background-color: #F3F4F6;
+  color: var(--text-primary);
+}
+
+.sidebar-link:hover .sidebar-icon {
+  color: var(--admin-green);
+}
+
+.sidebar-link.active {
+  background-color: #ECFDF3;
+  color: var(--admin-green);
+  font-weight: 600;
+}
+
+.sidebar-link.active .sidebar-icon {
+  color: var(--admin-green);
+}
+
+
+.sidebar-link.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  width: 4px;
+  height: 24px;
+  background-color: var(--admin-green);
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-item.active .nav-link,
+.sidebar-link.active {
+  background-color: #ECFDF3;
+  color: var(--admin-green);
+  font-weight: 600;
+}

@@ -73,12 +73,12 @@ body {
   border-color: var(--sage-green);
 }
 
-.form-group input:valid:not(:placeholder-shown) {
-  border-color: #10b981;
+.form-group input.input-error {
+  border-color: #ef4444;
 }
 
-.form-group input:invalid:not(:placeholder-shown) {
-  border-color: #ef4444;
+.form-group input.input-success {
+  border-color: #10b981;
 }
 
 .error-text {

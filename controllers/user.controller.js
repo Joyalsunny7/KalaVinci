@@ -24,7 +24,7 @@ import {
 // ================= auth ================= //
 
 export const Login = (req, res) => {
-  res.render('users/login' , {message: ' '});
+  res.render('users/login');
 };
 
 export const PostLogin = async (req, res) => {
@@ -53,6 +53,25 @@ export const PostLogin = async (req, res) => {
     res.render('users/login', { message: error.message });
   }
 };
+
+// ================= LOGOUT ================= //
+
+export const Logout = (req, res) => {
+  try {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.redirect('/home');
+      }
+      res.clearCookie('connect.sid');
+      return res.redirect('/login');
+    });
+  } catch (error) {
+    console.error('Logout failed:', error);
+    res.redirect('/home');
+  }
+};
+
 
 export const Signup = (req, res) => {
   res.render('users/signup');
@@ -115,8 +134,8 @@ export const VerifyOtpPage = (req, res) => {
   const email =
     req.session.tempUser?.email ||
     req.session.resetPassword?.email ||
-    req.session.emailReset?.email ||
-    req.session.emailReset?.newEmail;
+    req.session.emailReset?.newEmail ||
+    req.session.emailReset?.email;
 
   // Calculate remaining time
   let remainingTime = 0;
@@ -205,8 +224,8 @@ export const PostVerifyOtp = async (req, res) => {
       const email =
         req.session.tempUser?.email ||
         req.session.resetPassword?.email ||
-        req.session.emailReset?.email ||
         req.session.emailReset?.newEmail ||
+        req.session.emailReset?.email ||
         "";
       return res.render("users/verifyOtp", {
         error: otpValidation.message,
@@ -281,19 +300,27 @@ export const ForgotPassword = (req, res) => {
 
 export const PostForgotPassword = async (req, res) => {
   try {
+  
+
     const { email } = req.body;
 
-    // Validate email
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
-      return res.render('users/forgotPassword', { error: emailValidation.message });
+      return res.render('users/forgotPassword', {
+        error: emailValidation.message
+      });
     }
 
     const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
+  
+
     await sendForgotOtp(sanitizedEmail, req.session);
-    res.redirect('/verify-otp');
+    return res.redirect('/verify-otp');
+
   } catch (err) {
-    res.render('users/forgotPassword', { error: err.message });
+      return res.render('users/forgotPassword', {
+      error: err.message 
+    });
   }
 };
 
@@ -358,8 +385,6 @@ export const startEmailReset = async (req, res) => {
     res.redirect('/profile');
   }
 };
-
-
 
 
 export const emailResetPage = (req, res) => {

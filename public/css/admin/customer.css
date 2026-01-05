@@ -13,8 +13,11 @@ body {
 
 /* MAIN CONTENT */
 .admin-content {
-  margin-left: 280px; /* sidebar width */
+  margin-left: 280px;
   padding: 32px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
 }
 
 /* TABLE CONTAINER */
@@ -55,11 +58,13 @@ body {
 
 .pagination {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;  
   align-items: center;
   gap: 6px;
-  margin-top: 24px;
+  margin-top: 24px;         
+  padding-bottom: 16px;     
 }
+
 
 
 .pagination .page,
@@ -176,4 +181,52 @@ body {
 .block-btn.unblock {
   background: #dcfce7;
   color: #166534;
+}
+
+
+/* ================= TOGGLE SWITCH ================= */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ef4444; /* red = blocked */
+  border-radius: 999px;
+  transition: background-color 0.25s ease;
+}
+
+/* circle */
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+}
+
+/* checked = active */
+.switch input:checked + .slider {
+  background-color: #22c55e; /* green = active */
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
 }

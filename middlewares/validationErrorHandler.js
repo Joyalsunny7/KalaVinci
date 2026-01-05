@@ -1,9 +1,4 @@
-// Validation error handling middleware
 
-/**
- * Validation error handler
- * Handles validation errors and formats them for display
- */
 export const validationErrorHandler = (req, res, next) => {
   // Check for validation errors in request
   if (req.validationErrors) {

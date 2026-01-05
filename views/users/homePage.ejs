@@ -122,3 +122,12 @@
 
         <%- include('../partials/newJoin') %>
         <%- include('../partials/footer') %>
+
+        <script>
+  history.pushState(null, null, location.href);
+
+  window.onpopstate = function () {
+    history.pushState(null, null, location.href);
+    window.location.replace('/login');
+  };
+</script>

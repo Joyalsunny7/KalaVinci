@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +18,7 @@
             <!-- Brand Header -->
             <div class="brand-header">
                 <div class="logo-container">
-                    <img 
-                        src="/images/ICON1.png"
-                        alt="Logo"
-                        class="logo-img"
-                    />
+                    <img src="/images/ICON1.png" alt="Logo" class="logo-img" />
                 </div>
 
                 <h1 class="admin-title">Admin</h1>
@@ -29,22 +26,30 @@
             </div>
 
             <!-- Login Form -->
-            <form action="/admin" method="POST" class="login-form">
+            <form action="/admin" method="POST" class="login-form"id="adminLoginForm">
 
 
                 <div class="form-group">
                     <label class="label-text" for="email">Email</label>
-                    <input class="input-field" type="email" id="email" name="email" required>
+                    <input class="input-field" type="email" id="email" name="email">
                 </div>
 
                 <div class="form-group">
                     <label class="label-text" for="password">Password</label>
-                    <input class="input-field" type="password" id="password" name="password" required>
+                    <input class="input-field" type="password" id="password" name="password">
                 </div>
 
-                <button class="submit-btn" type="submit">
-                    Login
-                </button>
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error" id="adminLoginError">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+
+
+                        <button class="submit-btn" type="submit">
+                            Login
+                        </button>
 
             </form>
 
@@ -57,4 +62,29 @@
     </footer>
 
 </body>
+
 </html>
+
+
+<script>
+  (function () {
+    const errorBox = document.getElementById('adminLoginError');
+    const form = document.getElementById('adminLoginForm');
+
+    if (errorBox && !sessionStorage.getItem('adminLoginSubmitted')) {
+      errorBox.style.display = 'none';
+    }
+
+    if (form) {
+      form.addEventListener('submit', () => {
+        sessionStorage.setItem('adminLoginSubmitted', 'true');
+      });
+    }
+
+
+    window.addEventListener('pageshow', () => {
+      sessionStorage.removeItem('adminLoginSubmitted');
+    });
+  })();
+</script>
+

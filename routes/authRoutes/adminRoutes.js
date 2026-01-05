@@ -2,6 +2,7 @@ import express from "express";
 import {
   AdminLoginPage,
   AdminLogin,
+  AdminLogout,
   AdminDashboard,
   AdminCustomersPage,
   toggleBlockUser
@@ -16,10 +17,13 @@ router.route("/")
   .get(AdminLoginPage)
   .post(AdminLogin);
 
+router.get('/logout', AdminLogout);
+
+
 router.get("/dashboard", adminAuth, AdminDashboard);
 
 router.get("/customers", adminAuth, AdminCustomersPage);
 
-router.post('/users/:userId/block-toggle',adminAuth,toggleBlockUser)
+router.patch('/users/:userId/toggle-block',adminAuth,toggleBlockUser)
 
 export default router;

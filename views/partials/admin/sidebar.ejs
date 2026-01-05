@@ -28,13 +28,13 @@
         <nav class="sidebar-nav">
             <ul>
 
-                <li class="nav-item active">
+                <li
+                    class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
                     <a href="/admin/dashboard" class="nav-link">
                         <i class="fa-solid fa-gauge nav-icon"></i>
-                        <span>Dashboard</span>
+                        <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
-
 
                 <li class="nav-item">
                     <i class="fa-solid fa-box nav-icon"></i>
@@ -46,12 +46,13 @@
                     <span>Orders</span>
                 </li>
 
-                <li class="nav-item">
-                     <a href="/admin/customers" class="nav-link">
+                <li
+                    class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'customers' ? 'active' : '' %>">
                     <i class="fa-solid fa-users nav-icon"></i>
-                    <span>Customers</span>
+                    <span class="nav-text">Users</span>
                     </a>
                 </li>
+
 
                 <li class="nav-item">
                     <i class="fa-solid fa-chart-line nav-icon"></i>
@@ -82,6 +83,12 @@
                     <i class="fa-solid fa-palette nav-icon"></i>
                     <span>Artist Management</span>
                 </li>
+
+                <a href="/logout" class="sidebar-link logout-link">
+                    <i class="fa-solid fa-right-from-bracket sidebar-icon"></i>
+                    <span class="sidebar-text">Logout</span>
+                </a>
+
 
                 <li class="nav-item">
                     <i class="fa-solid fa-gear nav-icon"></i>

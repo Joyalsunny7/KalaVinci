@@ -3,6 +3,7 @@ import {
   //auth
   Login,
   PostLogin,
+  Logout,
   Signup,
   PostSignup,
   //otp
@@ -35,17 +36,21 @@ import {
 } from '../../controllers/user.controller.js';
 import {uploadProfilePhoto} from '../../config/multer.js';
 import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
+import { requireUserAuth, guestOnly } from '../../middlewares/userAuth.js';
 const router = express.Router();
 
 /* ================= AUTH ================= */
 
 router.route('/login')
-  .get(Login)
+  .get(guestOnly, Login)
   .post(PostLogin);
 
 router.route('/signup')
   .get(Signup)
   .post(PostSignup);
+
+router.route('/logout')
+  .get(Logout) 
 
 /* ================= OTP ================= */
 
@@ -69,15 +74,15 @@ router.route('/reset-password')
 /* ================= PROTECTED PAGES ================= */
 
 router.route('/home')
-  .get(HomePage);
+  .get(requireUserAuth, HomePage);
 
 router.route('/collections')
-  .get(collectionPage);
+  .get(requireUserAuth, collectionPage);
 
 // ================ profile ================ //
 
 router.route('/profile')
-  .get(ProfileRedirect);
+  .get(requireUserAuth, ProfileRedirect);
 
 router.route('/edit')
   .get(getEditProfile);
@@ -102,7 +107,7 @@ router.route('/email-reset')
 //==============   address   ===============//
 
 router.route('/address')
-  .get(addressPage);
+  .get(requireUserAuth, addressPage);
 
 router.route('/address/add')
   .get(addAddressPage)

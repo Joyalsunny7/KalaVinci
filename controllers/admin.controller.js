@@ -11,7 +11,7 @@ import { sanitizeInput } from "../utils/validators.js";
 
 export const AdminLoginPage = (req, res) => {
   if (req.session.adminId) {
-    return res.redirect("/admin/dashboard");
+    return res.render("admin/dashboard",{activePage : "dashboard"});
   }
 
   res.render("admin/login");
@@ -101,9 +101,9 @@ export const AdminCustomersPage = async (req, res) => {
 
 export const toggleBlockUser = async (req, res) => {
   try {
+
     const { userId } = req.params;
 
-    
     const idValidation = validateObjectId(userId);
     if (!idValidation.valid) {
       return res.status(400).json({
@@ -119,10 +119,30 @@ export const toggleBlockUser = async (req, res) => {
       isBlocked: user.isBlocked
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: error.message
     });
+  }
+};
+
+// ================= ADMIN LOGOUT ================= //
+
+export const AdminLogout = (req, res) => {
+  try {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Admin logout error:', err);
+        return res.redirect('admin/dashboard');
+      }
+
+      res.clearCookie('connect.sid');
+
+      return res.redirect('/admin');
+    });
+  } catch (error) {
+    console.error('Admin logout failed:', error);
+    return res.redirect('admin/dashboard');
   }
 };
 
