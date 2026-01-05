@@ -198,22 +198,20 @@ export const verifyForgototp = async (otp, session) => {
 // ================= RESET PASSWORD =================
 
 export const resetPasswordService = async (email, password) => {
-  if (!email) throw new Error('Session expired');
-  
-  const passwordValidation = validatePassword(password);
-  if (!passwordValidation.valid) {
-    throw new Error(passwordValidation.message);
-  }
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await User.findOne({ email: email.toLowerCase().trim() });
-  if (!user) {
+  const result = await User.updateOne(
+    { email },
+    { $set: { password: hashedPassword } }
+  );
+
+  console.log('UPDATE RESULT:', result);
+
+  if (result.matchedCount === 0) {
     throw new Error('User not found');
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  await User.updateOne(
-    { email: email.toLowerCase().trim() },
-    { $set: { password: hashedPassword } }
-  );
+  return true;
 };
+
+
