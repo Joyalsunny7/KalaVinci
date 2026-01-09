@@ -1,113 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
+<link rel="stylesheet" href="/css/partials/admin/sidebar.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Sidebar</title>
+<aside class="sidebar">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Header -->
+  <div class="sidebar-header">
+    <button class="hamburger" id="sidebarToggle">
+      <i class="fa-solid fa-bars"></i>
+    </button>
 
-    <link rel="stylesheet" href="/css/partials/admin/sidebar.css" />
-</head>
+    <div class="profile">
+      <img src="/images/ICON.png" alt="Admin">
+      <div class="profile-text">
+        <strong>Admin</strong>
+        <span>KALA VINCI</span>
+      </div>
+    </div>
+  </div>
 
-<body>
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <ul>
 
-    <aside class="sidebar">
+      <li class="<%= activePage === 'dashboard' ? 'active' : '' %>">
+        <a href="/admin/dashboard">
+          <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+        </a>
+      </li>
 
-        <!-- Sidebar Header -->
-        <div class="sidebar-header">
-            <div class="admin-profile">
-                <img src="/images/ICON.png" alt="Admin Logo" class="logo" />
-                <span class="admin-text">Admin</span>
-            </div>
-        </div>
+      <li class="<%= activePage === 'products' ? 'active' : '' %>">
+        <a href="/admin/products">
+          <i class="fa-solid fa-box"></i><span>Products</span>
+        </a>
+      </li>
 
-        <!-- Navigation -->
-        <nav class="sidebar-nav">
-            <ul>
+      <li class="has-submenu <%= activePage === 'orders' ? 'active' : '' %>">
+        <a href="#">
+          <i class="fa-solid fa-cart-shopping"></i><span>Orders</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/orders">Order Details</a></li>
+        </ul>
+      </li>
 
-                <li
-                    class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
-                    <a href="/admin/dashboard" class="nav-link">
-                        <i class="fa-solid fa-gauge nav-icon"></i>
-                        <span class="nav-text">Dashboard</span>
-                    </a>
-                </li>
+      <li class="has-submenu <%= activePage === 'users' ? 'active' : '' %>">
+        <a href="#">
+          <i class="fa-solid fa-users"></i><span>Users</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/customers">User Management</a></li>
+        </ul>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-box nav-icon"></i>
-                    <span>Products</span>
-                </li>
+      <li class="<%= activePage === 'reports' ? 'active' : '' %>">
+        <a href="/admin/reports">
+          <i class="fa-solid fa-chart-line"></i><span>Reports</span>
+        </a>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-cart-shopping nav-icon"></i>
-                    <span>Orders</span>
-                </li>
+      <li class="has-submenu <%= activePage === 'coupons' ? 'active' : '' %>">
+        <a href="#">
+          <i class="fa-solid fa-ticket"></i><span>Coupons</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/coupons">Coupon Management</a></li>
+        </ul>
+      </li>
 
-                <li
-                    class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'customers' ? 'active' : '' %>">
-                    <i class="fa-solid fa-users nav-icon"></i>
-                    <span class="nav-text">Users</span>
-                    </a>
-                </li>
+      <li class="has-submenu <%= activePage === 'categories' ? 'active' : '' %>">
+        <a href="/admin/categories">
+          <i class="fa-solid fa-layer-group"></i><span>Categories</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/offers">Category Management</a></li>
+        </ul>
+        <ul class="submenu">
+          <li><a href="/admin/offers">Style Management</a></li>
+        </ul>
+      </li>
 
+      <li class="<%= activePage === 'banners' ? 'active' : '' %>">
+        <a href="/admin/banners">
+          <i class="fa-solid fa-image"></i><span>Banners</span>
+        </a>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-chart-line nav-icon"></i>
-                    <span>Reports</span>
-                </li>
+      <li class="has-submenu <%= activePage === 'offers' ? 'active' : '' %>">
+        <a href="#">
+          <i class="fa-solid fa-tag"></i><span>Offers</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/offers">Offer Management</a></li>
+        </ul>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-ticket nav-icon"></i>
-                    <span>Coupons</span>
-                </li>
+      <li class="has-submenu <%= activePage === 'shipments' ? 'active' : '' %>">
+        <a href="#">
+          <i class="fa-solid fa-truck"></i><span>Shipments</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="/admin/shipments">Shipment Resolve</a></li>
+        </ul>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-layer-group nav-icon"></i>
-                    <span>Categories</span>
-                </li>
+      <li class="logout">
+        <a href="/admin/logout">
+          <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+        </a>
+      </li>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-image nav-icon"></i>
-                    <span>Banner Management</span>
-                </li>
+    </ul>
+  </nav>
+</aside>
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-tags nav-icon"></i>
-                    <span>Offer Management</span>
-                </li>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
+  const toggle = document.getElementById("sidebarToggle");
+  const submenuLinks = document.querySelectorAll(".has-submenu > a");
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-palette nav-icon"></i>
-                    <span>Artist Management</span>
-                </li>
+  toggle.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
 
-                <a href="/logout" class="sidebar-link logout-link">
-                    <i class="fa-solid fa-right-from-bracket sidebar-icon"></i>
-                    <span class="sidebar-text">Logout</span>
-                </a>
+  submenuLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      if (sidebar.classList.contains("collapsed")) return;
 
+      e.preventDefault();
+      const parent = link.parentElement;
+      const open = parent.classList.contains("active");
 
-                <li class="nav-item">
-                    <i class="fa-solid fa-gear nav-icon"></i>
-                    <span>Settings</span>
-                </li>
+      document.querySelectorAll(".has-submenu").forEach(i =>
+        i.classList.remove("active")
+      );
 
-            </ul>
-        </nav>
+      if (!open) parent.classList.add("active");
+    });
+  });
+});
 
-        <!-- Sidebar Footer -->
-        <div class="sidebar-footer">
-            <div class="nav-item">
-                <i class="fa-solid fa-circle-plus nav-icon"></i>
-                <span>Extras</span>
-            </div>
-        </div>
-
-    </aside>
-
-</body>
-
-</html>
+</script>

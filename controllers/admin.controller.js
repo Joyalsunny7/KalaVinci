@@ -1,17 +1,16 @@
-import { adminLoginService,
-         getAllCustomersService,
-         toggleBlockUserService
- } from "../services/admin.service.js";
+import {
+  adminLoginService,
+  getAllCustomersService,
+  toggleBlockUserService,
+} from "../services/admin.service.js";
 import { validateEmail, validateObjectId } from "../utils/validators.js";
 import { sanitizeInput } from "../utils/validators.js";
-
-
 
 // ================= Admin login page ================= //
 
 export const AdminLoginPage = (req, res) => {
   if (req.session.adminId) {
-    return res.render("admin/dashboard",{activePage : "dashboard"});
+    return res.redirect("admin/dashboard");
   }
 
   res.render("admin/login");
@@ -29,7 +28,6 @@ export const AdminLogin = async (req, res) => {
       });
     }
 
-
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       return res.render("admin/login", {
@@ -42,22 +40,34 @@ export const AdminLogin = async (req, res) => {
 
     req.session.adminId = admin._id;
 
+    req.session.toast = {
+      type: "success",
+      message: "Admin logged in successfully",
+    };
+
     res.redirect("/admin/dashboard");
   } catch (err) {
-    console.error("LOGIN ERROR:", err.message);
-
     res.render("admin/login", {
-      error: err.message,
+      toast: {
+        type: "error",
+        message: err.message,
+      },
     });
   }
 };
 
-
 // ================= admin dashboard ================= //
 
 export const AdminDashboard = (req, res) => {
-  res.render("admin/dashboard");
+  const toast = req.session.toast;
+  delete req.session.toast;
+
+  res.render("admin/dashboard", {
+    activePage: "dashboard",
+    toast,
+  });
 };
+
 
 // ================= admin customer page ================= //
 export const AdminCustomersPage = async (req, res) => {
@@ -67,15 +77,15 @@ export const AdminCustomersPage = async (req, res) => {
     const search = sanitizeInput(req.query.search || "");
     const sort = req.query.sort === "asc" ? "asc" : "desc";
 
-    const { customers, totalUsers } =
-      await getAllCustomersService({
-        page,
-        limit,
-        search,
-        sort,
-      });
+    const { customers, totalUsers } = await getAllCustomersService({
+      page,
+      limit,
+      search,
+      sort,
+    });
 
     res.render("admin/customers", {
+      activePage: "users",
       customers,
       currentPage: page,
       totalPages: Math.ceil(totalUsers / limit),
@@ -83,8 +93,6 @@ export const AdminCustomersPage = async (req, res) => {
       sort,
     });
   } catch (err) {
-    console.error("CUSTOMERS PAGE ERROR:", err.message);
-
     res.render("admin/customers", {
       customers: [],
       currentPage: 1,
@@ -96,33 +104,18 @@ export const AdminCustomersPage = async (req, res) => {
   }
 };
 
-
 // ================= block or unblock user ================= //
 
 export const toggleBlockUser = async (req, res) => {
   try {
+    const user = await toggleBlockUserService(req.params.userId);
 
-    const { userId } = req.params;
-
-    const idValidation = validateObjectId(userId);
-    if (!idValidation.valid) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid user ID format"
-      });
-    }
-
-    const user = await toggleBlockUserService(userId);
-
-    return res.status(200).json({
+    return res.json({
       success: true,
-      isBlocked: user.isBlocked
+      isBlocked: user.isBlocked,
     });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message
-    });
+  } catch (err) {
+    return res.status(400).json({ success: false, message: err.message });
   }
 };
 
@@ -130,24 +123,16 @@ export const toggleBlockUser = async (req, res) => {
 
 export const AdminLogout = (req, res) => {
   try {
-    req.session.destroy(err => {
+    req.session.destroy((err) => {
       if (err) {
-        console.error('Admin logout error:', err);
-        return res.redirect('admin/dashboard');
+        return res.redirect("admin/dashboard");
       }
 
-      res.clearCookie('connect.sid');
+      res.clearCookie("connect.sid");
 
-      return res.redirect('/admin');
+      return res.redirect("/admin?logout=1");
     });
   } catch (error) {
-    console.error('Admin logout failed:', error);
-    return res.redirect('admin/dashboard');
+    return res.redirect("admin/dashboard");
   }
 };
-
-
-
-
-
-

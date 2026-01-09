@@ -1,200 +1,204 @@
-
-.login-section {
-    padding: 80px 20px;
-    display: flex;
-    justify-content: center;
-    min-height: 600px;
-    background-color: #ffffff;
+/* ===============================
+   BASE
+================================ */
+* {
+  box-sizing: border-box;
 }
-.login-card {
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   BACKGROUND WALLPAPER
+================================ */
+.login-wallpaper {
+  position: fixed;
+  inset: 0;
+  background:
+    url("/images/login\ wallpaper.jpeg"); /* 🔁 change image here */
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+
+/* ===============================
+   CENTER WRAPPER
+================================ */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* ===============================
+   GLASS LOGIN CARD
+================================ */
+.login-section {
   width: 100%;
   max-width: 420px;
-  text-align: center;
-  background-color: #ffffff;
-  padding: 32px;
-  border-radius: 12px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 42px 36px;
+
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+
+  animation: fadeUp 0.8s ease;
 }
 
-
-.page-hero {
-    background-color: #F8F9FA;  
-    padding: 40px 5%;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-
-.page-hero h1,
-.page-hero .breadcrumbs {
-    padding-left: 10px;  
-}
-
-.page-hero h1 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.breadcrumbs {
-    font-size: 12px;
-    color: #666666;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-
+/* ===============================
+   GOOGLE BUTTON
+================================ */
 .google-btn {
-    width: 100%;
-    padding: 12px;
-    background: white;
-    border: 1px solid #E5E7EB;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 500;
-    color: #666666;
-    cursor: pointer;
-    margin-bottom: 30px;
+  width: 100%;
+  padding: 14px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 26px;
+  transition: transform 0.2s ease;
 }
 
 .google-btn:hover {
-    background-color: #F8F9FA;
+  transform: translateY(-2px);
 }
 
-
+/* ===============================
+   DIVIDER
+================================ */
 .divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    color: #999;
-    font-size: 12px;
-    margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #ffffff;
+  margin-bottom: 26px;
 }
 
 .divider::before,
 .divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #eee;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.5);
 }
 
-.divider:not(:empty)::before { margin-right: 15px; }
-.divider:not(:empty)::after { margin-left: 15px; }
-
+/* ===============================
+   FORM
+================================ */
 .form-group {
-    text-align: left;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #333333;
-    margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 8px;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 14px;
-    border: 1px solid #E5E7EB;
-    border-radius: 4px;
-    outline: none;
-    font-size: 14px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: rgba(255,255,255,0.95);
 }
 
-.form-group input:focus {
-    border-color: #E67E6E;
-    box-shadow: 0 0 0 3px rgba(230, 126, 110, 0.1);
+/* PASSWORD */
+.password-group {
+  position: relative;
 }
 
+.password-input {
+  padding-right: 44px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/* ===============================
+   ERROR
+================================ */
 .error {
-  background-color: #FEE2E2;
-  color: #991B1B;
+  background: rgba(254,226,226,0.95);
+  color: #991b1b;
   padding: 12px 14px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 14px;
   margin-bottom: 16px;
 }
 
+/* ===============================
+   LINKS & BUTTONS
+================================ */
 .forgot-link {
-    display: block;
-    text-align: right;
-    font-size: 12px;
-    color: #666666;
-    margin-top: -10px;
-    margin-bottom: 30px;
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #ffffff;
+  margin-bottom: 26px;
+  text-decoration: none;
 }
-
-.forgot-link:hover {
-    text-decoration: underline;
-}
-
 
 .login-btn {
-    width: 100%;
-    padding: 16px;
-    background-color: #E67E6E;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 20px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  box-shadow: 0 14px 30px rgba(34,197,94,0.45);
+  transition: transform 0.25s ease;
 }
 
 .login-btn:hover {
-    opacity: 0.9;
+  transform: translateY(-3px);
 }
 
-
 .signup-text {
-    font-size: 14px;
-    color: #666666;
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffffff;
 }
 
 .signup-text a {
-    color: #333333;
-    font-weight: 600;
-}
-
-.signup-text a:hover {
-    text-decoration: underline;
-}
-
-
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 14px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  animation: slideIn 0.3s ease;
-}
-
-.toast-success {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.toast-error {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  color: #ffffff;
+  font-weight: 600;
 }

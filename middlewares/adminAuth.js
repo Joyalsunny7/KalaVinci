@@ -3,38 +3,53 @@ import User from '../models/user.js';
 
 export const adminAuth = (req, res, next) => {
   if (!req.session.adminId) {
+
+    const isApiRequest =
+      req.xhr ||
+      req.headers.accept?.includes("application/json") ||
+      req.originalUrl.startsWith("/admin/users");
+
+    if (isApiRequest) {
+      return res.status(401).json({
+        success: false,
+        message: "Admin session expired"
+      });
+    }
+
     return res.redirect("/admin");
   }
+
   next();
 };
 
 
+
+
+
+
 export const checkBlocked = async (req, res, next) => {
-  if (!req.session.userId) return next();
-
   try {
-    const user = await User.findById(req.session.userId);
+    if (!req.session?.userId) {
+      return next();
+    }
 
+    const user = await User.findById(req.session.userId);
     if (!user) {
-      req.session.destroy(() => {
-        return res.redirect('/login');
-      });
+      req.session.destroy(() => res.redirect('/login'));
       return;
     }
 
     if (user.isBlocked) {
       req.session.destroy(() => {
-        return res.redirect('/login?error=blocked');
+        res.redirect('/login?error=blocked');
       });
       return;
     }
 
     next();
   } catch (error) {
-    console.error('Error checking blocked status:', error);
-    req.session.destroy(() => {
-      return res.redirect('/login');
-    });
+    console.error('checkBlocked error:', error);
+    req.session.destroy(() => res.redirect('/login'));
   }
 };
 

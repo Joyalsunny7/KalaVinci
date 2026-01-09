@@ -24,6 +24,11 @@ router.get("/dashboard", adminAuth, AdminDashboard);
 
 router.get("/customers", adminAuth, AdminCustomersPage);
 
-router.patch('/users/:userId/toggle-block',adminAuth,toggleBlockUser)
+router.patch(
+  "/users/:userId/toggle-block",
+  adminAuth,
+  toggleBlockUser
+);
+
 
 export default router;

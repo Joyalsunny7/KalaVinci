@@ -1,39 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --sage-green: #8db08f;
-  --sage-hover: #7e9e80;
-  --admin-green: #006B3F;
+  --primary: #8db08f;
+  --primary-dark: #006B3F;
 }
 
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
-  border: none !important;
-  outline: none !important;
-}
-
-
-.error {
-  background-color: #FEE2E2;
-  color: #991B1B;
-  padding: 12px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 16px;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background-color: #F9FAFB;
+  background: #f9fafb;
   color: #374151;
 }
 
-/* =========================
-   CENTER PAGE
-========================= */
+/* LAYOUT */
 .login-wrapper {
   min-height: 100vh;
   display: flex;
@@ -41,64 +24,42 @@ body {
   align-items: center;
 }
 
-/* =========================
-   CARD
-========================= */
+/* CARD */
 .login-card {
   width: 100%;
   max-width: 420px;
   background: white;
   padding: 40px;
   border-radius: 24px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
-  animation: scaleIn 0.4s ease-out;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    animation: scaleFadeIn 0.45s ease-out;
 }
 
-.login-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
-}
-
-/* =========================
-   BRAND
-========================= */
+/* BRAND */
 .brand-header {
   text-align: center;
   margin-bottom: 32px;
 }
 
-.logo-container {
-  width: 96px;
-  height: 96px;
-  margin: auto;
-}
-
 .logo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
+  width: 90px;
+  margin-bottom: 12px;
 }
 
 .admin-title {
-  margin-top: 18px;
   font-size: 28px;
-  font-weight: 700;
-  color: var(--admin-green);
+  color: var(--primary-dark);
+  margin: 0;
 }
 
 .brand-name {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #9CA3AF;
+  color: #9ca3af;
   font-weight: 700;
 }
 
-/* =========================
-   FORM
-========================= */
+/* FORM */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -110,70 +71,144 @@ body {
   flex-direction: column;
 }
 
-.label-text {
+label {
   font-size: 14px;
   font-weight: 600;
-  color: #6B7280;
   margin-bottom: 6px;
+  color: #6b7280;
 }
 
 .input-field {
-  padding: 14px 18px;
+  padding: 14px 16px;
   border-radius: 16px;
-  background-color: #F3F4F6;
+  background: #f3f4f6;
+  border: none;
   font-size: 14px;
+   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-field:focus {
-  background-color: #ECEFF1;
+  outline: none;
+  background: #eceff1;
+    background-color: #eceff1;
+  box-shadow: 0 0 0 2px rgba(141, 176, 143, 0.25);
 }
 
-/* =========================
-   BUTTON
-========================= */
+/* PASSWORD */
+.password-group {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6b7280;
+   transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.toggle-password:hover {
+  color: #111827;
+   transform: scale(1.08);
+}
+
+/* ERROR */
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* BUTTON */
 .submit-btn {
-  margin-top: 12px;
+  margin-top: 10px;
   padding: 14px;
-  background-color: var(--sage-green);
-  color: white;
   font-size: 18px;
   font-weight: 700;
+  color: white;
+  background: var(--primary);
+  border: none;
   border-radius: 16px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+   transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .submit-btn:hover {
-  background-color: black;
+  background: #000;
+    transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
+
 
 .submit-btn:active {
   transform: scale(0.97);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 .footer {
   position: absolute;
-  bottom: 20px;
+  bottom: 18px;
   width: 100%;
   text-align: center;
   font-size: 11px;
-  color: #9CA3AF;
+  color: #9ca3af;
 }
 
-/* =========================
-   ANIMATION
-========================= */
-@keyframes scaleIn {
+
+@keyframes scaleFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(12px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
 }
+
+/* Toast container */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Toast */
+.toast {
+  min-width: 260px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 3s forwards;
+}
+
+/* Variants */
+.toast-success { background-color: #16a34a; }
+.toast-error   { background-color: #dc2626; }
+.toast-info    { background-color: #2563eb; }
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(20px); }
+}
+

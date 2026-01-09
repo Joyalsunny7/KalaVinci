@@ -8,6 +8,8 @@
 </head>
 
 <body>
+    <div id="toast-container"></div>
+
 
     <%- include('../partials/admin/sidebar') %>
         <main class="admin-content">
@@ -111,25 +113,55 @@
             document.querySelectorAll('.block-toggle').forEach(toggle => {
                 toggle.addEventListener('change', async () => {
                     const userId = toggle.dataset.userId;
+                    const previousState = toggle.checked;
 
                     try {
                         const res = await fetch(`/admin/users/${userId}/toggle-block`, {
-                            method: 'PATCH'
+                            method: 'PATCH',
+                            headers: {
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'same-origin'
                         });
+
+
+                        if (!res.ok) {
+                            const data = await res.json().catch(() => ({}));
+                            toggle.checked = !previousState;
+                            alert(data.message || "Action failed");
+                            return;
+                        }
 
                         const data = await res.json();
 
                         if (!data.success) {
-                            toggle.checked = !toggle.checked;
-                            alert(data.message || 'Action failed');
+                            toggle.checked = !previousState;
+                            alert(data.message || "Action failed");
                         }
+
                     } catch (err) {
-                        toggle.checked = !toggle.checked;
-                        alert('Server error');
+                        toggle.checked = !previousState;
+                        alert("Network error");
                     }
                 });
             });
+
+
+
+
+
+            function showToast(message, type = "info") {
+                const container = document.getElementById("toast-container");
+                if (!container) return;
+
+                const toast = document.createElement("div");
+                toast.className = `toast toast-${type}`;
+                toast.textContent = message;
+
+                container.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 3300);
+            }
         </script>
-
-
-</body>

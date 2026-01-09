@@ -149,6 +149,37 @@ body {
   font-size: 0.875rem;
 }
 
+/* Wrapper must be relative */
+.password-group {
+  position: relative;
+}
+
+/* Input padding for eye icon */
+.password-group input {
+  width: 100%;
+  padding: 14px 44px 14px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Eye icon */
+.toggle-password {
+  position: absolute;
+  top: 42px;              /* aligns with input */
+  right: 14px;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 16px;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.toggle-password:hover {
+  color: #111827;
+  transform: scale(1.1);
+}
+
+
 
 @keyframes scaleIn {
   from {

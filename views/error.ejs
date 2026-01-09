@@ -1,78 +1,175 @@
-<%- include('./partials/header', { title: 'Error | Kala Vinci' }) %>
-<link rel="stylesheet" href="/css/user/login.css">
 <style>
-    .error-container {
-        min-height: 60vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-    }
-    .error-card {
-        background: white;
-        border-radius: 8px;
-        padding: 3rem;
-        max-width: 500px;
-        width: 100%;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .error-code {
-        font-size: 4rem;
-        font-weight: bold;
-        color: #e74c3c;
-        margin-bottom: 1rem;
-    }
-    .error-message {
-        font-size: 1.25rem;
-        color: #333;
-        margin-bottom: 2rem;
-    }
-    .error-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    }
-    .btn {
-        padding: 0.75rem 2rem;
-        border-radius: 4px;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s;
-    }
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-    .btn-secondary {
-        background: #6c757d;
-        color: white;
-    }
-    .btn-secondary:hover {
-        background: #545b62;
-    }
+/* ===============================
+   FULL CANVAS BACKGROUND
+================================ */
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Background Image + Gradient Overlay */
+.art-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(31,170,89,0.75),
+      rgba(243, 204, 177, 0.75)
+    ),
+    url("/images/Africa\'s\ Beauty\ Creatively\ by\ Humble\ Homage.jpeg"); /* 👈 YOUR IMAGE */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -3;
+}
+
+/* ===============================
+   PAINT BLOBS (ANIMATION)
+================================ */
+.paint-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.paint-blob {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  filter: blur(90px);
+  animation: float 20s infinite alternate ease-in-out;
+}
+
+.paint-blob.green {
+  background: radial-gradient(circle, #22c55e, transparent 70%);
+  top: -120px;
+  left: -120px;
+}
+
+.paint-blob.orange {
+  background: radial-gradient(circle, #fb923c, transparent 70%);
+  bottom: -150px;
+  right: -150px;
+  animation-duration: 26s;
+}
+
+@keyframes float {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(80px,-60px) scale(1.15); }
+}
+
+/* ===============================
+   ERROR CONTENT (NO CARD)
+================================ */
+.error-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  animation: fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.error-content {
+  color: #ffffff;
+  max-width: 700px;
+}
+
+/* Error Code */
+.error-code {
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 900;
+  letter-spacing: 4px;
+  background: linear-gradient(90deg, #bbf7d0, #fed7aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Message */
+.error-message {
+  font-size: 1.4rem;
+  line-height: 1.7;
+  margin: 1.5rem 0 3rem;
+  color: #fefefe;
+}
+
+/* ===============================
+   ACTION BUTTONS
+================================ */
+.error-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.9rem 2.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.4px;
+  transition: all 0.35s ease;
+}
+
+/* Primary */
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 12px 28px rgba(34,197,94,0.45);
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px) scale(1.03);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: white;
+  box-shadow: 0 12px 28px rgba(249,115,22,0.45);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-4px) scale(1.03);
+}
 </style>
 
+<!-- BACKGROUND IMAGE -->
+<div class="art-bg"></div>
+
+<!-- PAINT ANIMATION -->
+<div class="paint-bg">
+  <div class="paint-blob green"></div>
+  <div class="paint-blob orange"></div>
+</div>
+
 <main>
-    <div class="error-container">
-        <div class="error-card">
-            <div class="error-code"><%= statusCode || 500 %></div>
-            <div class="error-message">
-                <%= error || 'An unexpected error occurred' %>
-            </div>
-            <div class="error-actions">
-                <a href="/home" class="btn btn-primary">Go Home</a>
-                <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
-            </div>
-        </div>
+  <div class="error-container">
+    <div class="error-content">
+      <div class="error-code"><%= statusCode || 500 %></div>
+      <div class="error-message">
+        <%= error || 'An unexpected error occurred' %>
+      </div>
+      <div class="error-actions">
+        <a href="/home" class="btn btn-primary">Go Home</a>
+        <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+      </div>
     </div>
+  </div>
 </main>
 
-<%- include('./partials/footer') %>
-
 <script>
+  // Prevent error page navigation loop
   window.history.replaceState(null, null, window.location.href);
 </script>

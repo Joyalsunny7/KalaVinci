@@ -86,27 +86,28 @@ export const getAllCustomersService = async ({
 
 
 export const toggleBlockUserService = async (userId) => {
-  const idValidation = validateObjectId(userId);
-  if (!idValidation.valid) {
-    throw new Error('Invalid user ID format');
+  const { valid } = validateObjectId(userId);
+  if (!valid) {
+    throw new Error('Invalid user ID');
   }
 
   const user = await User.findById(userId);
-
   if (!user) {
     throw new Error('User not found');
   }
 
   if (user.isAdmin) {
-    throw new Error('Admin cannot be blocked');
+    throw new Error('Admin users cannot be blocked');
   }
 
   user.isBlocked = !user.isBlocked;
   await user.save();
 
-  return user;
+  return {
+    id: user._id,
+    isBlocked: user.isBlocked,
+  };
 };
-
 
 
 
