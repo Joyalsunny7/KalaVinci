@@ -4,11 +4,14 @@ import {
   AdminLogin,
   AdminLogout,
   AdminDashboard,
+} from "../../controllers/admin/admin.controller.js";
+
+import {
   AdminCustomersPage,
   toggleBlockUser
-} from "../../controllers/admin.controller.js";
+} from "../../controllers/admin/customer.controller.js";
 
-import { adminAuth } from "../../middlewares/adminAuth.js";
+import { adminAuth } from "../../middlewares/auth.js";
 
 const router = express.Router();
 

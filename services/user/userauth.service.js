@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import User from '../models/user.js';
-import { generateOtp } from './otp.services.js';
-import { sendOtpEmail } from './email.service.js';
-import { validateEmail, validatePassword, validatePhone, validateName } from '../utils/validators.js';
+import User from '../../models/user/user.model.js';
+import { generateOtp } from '../otp.services.js';
+import { sendOtpEmail } from '../email.service.js';
+import { validateEmail, validatePassword, validatePhone, validateName } from '../../utils/validators.js';
 
 // ================= LOGIN =================
 

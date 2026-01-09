@@ -1,6 +1,6 @@
-import User from "../models/user.js";
+import User from "../../models/user/user.model.js";
 import bcrypt from "bcryptjs";
-import { validateEmail, validateObjectId } from "../utils/validators.js";
+import { validateEmail, validateObjectId } from "../../utils/validators.js";
 
 
 export const adminLoginService = async (email, password) => {

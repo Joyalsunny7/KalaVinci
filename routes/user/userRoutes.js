@@ -17,14 +17,6 @@ import {
   //home
   HomePage,
   collectionPage,
-  //profile
-  ProfileRedirect,
-  getEditProfile,
-  updateProfile,
-  //email
-  startEmailReset,
-  emailResetPage,
-  postEmailReset,
   //address
   addAddressPage,
   addAddress,
@@ -33,10 +25,19 @@ import {
   addressPage,
   deleteAddress,
   resendOtp
-} from '../../controllers/user.controller.js';
+} from '../../controllers/user/user.controller.js';
+
+import {
+  ProfileRedirect,
+  getEditProfile,
+  updateProfile,
+  startEmailReset,
+  emailResetPage,
+  postEmailReset,
+} from '../../controllers/user/profileController.js';
 import {uploadProfilePhoto} from '../../config/multer.js';
 import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
-import { requireUserAuth, guestOnly } from '../../middlewares/userAuth.js';
+import { requireUserAuth, guestOnly } from '../../middlewares/auth.js';
 const router = express.Router();
 
 /* ================= AUTH ================= */

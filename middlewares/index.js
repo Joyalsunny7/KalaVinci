@@ -1,5 +1,5 @@
 
-export { adminAuth, checkBlocked, Toasted } from './adminAuth.js';
+export { adminAuth, requireUserAuth, guestOnly, checkBlocked, Toasted } from './auth.js';
 export { 
   errorHandler, 
   asyncHandler, 

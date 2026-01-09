@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { checkBlocked, Toasted } from './middlewares/adminAuth.js';
+import { checkBlocked, Toasted } from './middlewares/auth.js';
 import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
 import express from 'express';
 import path from 'path';
@@ -8,9 +8,9 @@ import session from 'express-session';
 import './config/passport.js';
 import connectDB from './config/db.js';
 import { fileURLToPath } from 'url';
-import adminRoutes from './routes/authRoutes/adminRoutes.js'
-import userRoutes from './routes/authRoutes/userRoutes.js';
-import authgoogleroutes from './routes/authRoutes/googleAuthRoutes.js';
+import adminRoutes from './routes/admin/adminRoutes.js'
+import userRoutes from './routes/user/userRoutes.js';
+import authgoogleroutes from './routes/user/googleAuthRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 7071;

@@ -1,5 +1,4 @@
-import User from '../models/user.js';
-
+import User from '../models/user/user.model.js';
 
 export const adminAuth = (req, res, next) => {
   if (!req.session.adminId) {
@@ -21,11 +20,6 @@ export const adminAuth = (req, res, next) => {
 
   next();
 };
-
-
-
-
-
 
 export const checkBlocked = async (req, res, next) => {
   try {
@@ -53,8 +47,22 @@ export const checkBlocked = async (req, res, next) => {
   }
 };
 
-export const Toasted = (req,res,next) => {
+export const Toasted = (req, res, next) => {
   res.locals.toast = req.session.toast;
   delete req.session.toast;
-  next()
-}
+  next();
+};
+
+export const requireUserAuth = (req, res, next) => {
+  if (!req.session || !req.session.userId) {
+    return res.redirect('/login');
+  }
+  next();
+};
+
+export const guestOnly = (req, res, next) => {
+  if (req.session?.userId) {
+    return res.redirect('/home');
+  }
+  next();
+};

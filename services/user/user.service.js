@@ -1,5 +1,5 @@
-import User from '../models/user.js';
-import { validateObjectId } from '../utils/validators.js';
+import User from '../../models/user/user.model.js';
+import { validateObjectId } from '../../utils/validators.js';
 
 export const getUserById = async (userId) => {
   try {
