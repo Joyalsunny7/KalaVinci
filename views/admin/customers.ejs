@@ -8,8 +8,7 @@
 </head>
 
 <body>
-    <div id="toast-container"></div>
-
+    <%- include('../partials/toast') %>
 
     <%- include('../partials/admin/sidebar') %>
         <main class="admin-content">
@@ -128,7 +127,7 @@
                         if (!res.ok) {
                             const data = await res.json().catch(() => ({}));
                             toggle.checked = !previousState;
-                            alert(data.message || "Action failed");
+                            showToast(data.message || "Action failed", 'error');
                             return;
                         }
 
@@ -136,12 +135,12 @@
 
                         if (!data.success) {
                             toggle.checked = !previousState;
-                            alert(data.message || "Action failed");
+                            showToast(data.message || "Action failed", 'error');
                         }
 
                     } catch (err) {
                         toggle.checked = !previousState;
-                        alert("Network error");
+                        showToast("Network error", 'error');
                     }
                 });
             });
@@ -149,19 +148,4 @@
 
 
 
-
-            function showToast(message, type = "info") {
-                const container = document.getElementById("toast-container");
-                if (!container) return;
-
-                const toast = document.createElement("div");
-                toast.className = `toast toast-${type}`;
-                toast.textContent = message;
-
-                container.appendChild(toast);
-
-                setTimeout(() => {
-                    toast.remove();
-                }, 3300);
-            }
         </script>

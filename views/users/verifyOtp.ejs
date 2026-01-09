@@ -184,22 +184,17 @@
         inputs[0].focus();
 
         // Show success message
-        otpError.style.color = 'green';
-        otpError.textContent = 'OTP resent successfully!';
-        otpError.style.display = 'block';
-        setTimeout(() => {
-          otpError.style.display = 'none';
-          otpError.style.color = 'red';
-        }, 3000);
+        showToast('OTP resent successfully!', 'success');
+        // Clear the local inline errors
+        otpError.style.display = 'none';
+        setTimeout(() => { otpError.style.color = 'red'; }, 3000);
       } else {
-        otpError.textContent = data.message || 'Failed to resend OTP';
-        otpError.style.display = 'block';
+        showToast(data.message || 'Failed to resend OTP', 'error');
         resendBtn.disabled = false;
         resendBtn.innerHTML = 'Resend OTP';
       }
     } catch (error) {
-      otpError.textContent = 'Failed to resend OTP. Please try again.';
-      otpError.style.display = 'block';
+      showToast('Failed to resend OTP. Please try again.', 'error');
       resendBtn.disabled = false;
       resendBtn.innerHTML = 'Resend OTP';
     }

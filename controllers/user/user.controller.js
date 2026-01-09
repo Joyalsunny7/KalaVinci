@@ -47,6 +47,7 @@ export const PostLogin = async (req, res) => {
     const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
     const user = await loginService(sanitizedEmail, password);
     req.session.userId = user._id;
+    req.session.toast = { type: 'success', message: 'Logged in successfully' };
 
     res.redirect("/home");
   } catch (error) {
@@ -64,7 +65,7 @@ export const Logout = (req, res) => {
         return res.redirect("/home");
       }
       res.clearCookie("connect.sid");
-      return res.redirect("/login");
+      return res.redirect("/login?logout=1");
     });
   } catch (error) {
     console.error("Logout failed:", error);
@@ -113,6 +114,7 @@ export const PostSignup = async (req, res) => {
     };
 
     await signupWithOtp(sanitizedData, req.session);
+    req.session.toast = { type: 'info', message: 'OTP sent to your email' };
     res.redirect("/verify-otp");
   } catch (err) {
     res.render("users/signup", { error: err.message });
@@ -254,6 +256,7 @@ export const PostVerifyOtp = async (req, res) => {
     if (req.session.tempUser) {
       await verifyOtpAndSignup(otp, req.session);
       req.session.tempUser = null;
+      req.session.toast = { type: 'success', message: 'Account verified. You can now log in.' };
       return res.redirect("/login");
     }
 
@@ -264,6 +267,7 @@ export const PostVerifyOtp = async (req, res) => {
         req.session.emailReset.step = "enter-new";
         delete req.session.resetPassword;
 
+        req.session.toast = { type: 'success', message: 'Old email verified. Enter new email' };
         return res.redirect("/email-reset");
       }
 
@@ -276,6 +280,7 @@ export const PostVerifyOtp = async (req, res) => {
 
         req.session.emailReset = null;
         delete req.session.resetPassword;
+        req.session.toast = { type: 'success', message: 'Email updated. Please log in with your new email' };
 
         return res.redirect("/login");
       }
@@ -329,6 +334,7 @@ export const PostForgotPassword = async (req, res) => {
     const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
 
     await sendForgotOtp(sanitizedEmail, req.session);
+    req.session.toast = { type: 'info', message: 'OTP sent to your email' };
     return res.redirect("/verify-otp");
   } catch (err) {
     return res.render("users/forgotPassword", {
@@ -380,6 +386,7 @@ export const PostResetPassword = async (req, res) => {
 
   
     delete req.session.resetPassword;
+    req.session.toast = { type: 'success', message: 'Password reset successfully. Please login.' };
 
     return res.redirect("/login?reset=success");
   } catch (err) {

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Category Management</title>
     <style>
-        /* Base Styles */
+        
         :root {
             --bg-color: #f8f8f8;
-            --header-border: #8a4fff; /* Purple border */
+            --header-border: #8a4fff; 
             --table-header: #a5a5a5;
             --green-toggle: #4cd964;
             --red-toggle: #ff3b30;
@@ -25,7 +25,6 @@
             color: #333;
         }
 
-        /* Top Header / Breadcrumb */
         .admin-header {
             background-color: #ffffff;
             padding: 15px 50px;
@@ -55,7 +54,6 @@
             padding: 0 20px;
         }
 
-        /* Table Styling */
         .table-wrapper {
             background: white;
             border-radius: 10px;
@@ -84,7 +82,6 @@
             font-size: 14px;
         }
 
-        /* iOS Style Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -116,7 +113,6 @@
         input:checked + .slider { background-color: var(--green-toggle); }
         input:checked + .slider:before { transform: translateX(22px); }
 
-        /* Action Buttons */
         .action-btns {
             display: flex;
             justify-content: center;
@@ -134,7 +130,6 @@
 
         .btn-delete { color: #ff3b30; }
 
-        /* Add Category Card */
         .add-card {
             background: #ffffff;
             border-radius: 30px;
@@ -203,19 +198,21 @@
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    <div class="admin-header">
+    <%- include('../partials/toast') %>
+
+    <%- include('../partials/admin/sidebar') %>
+
+    <main class="main-content">
+      <div class="admin-header">
         <div class="breadcrumb">
             <span class="fade">Admin</span> &gt; Category
         </div>
         <div class="logout-btn">
-            <!-- Simple SVG Icon for Logout -->
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
         </div>
     </div>
 
     <div class="container">
-        <!-- Dynamic Table Section -->
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -229,20 +226,20 @@
                 <tbody>
                     <% if (categories && categories.length > 0) { %>
                         <% categories.forEach((cat, index) => { %>
-                            <tr>
-                                <td><%= index + 1 %></td>
-                                <td><%= cat.name %></td>
-                                <td>
+                            <tr data-id="<%= cat._id %>">
+                                <td class="col-index"><%= index + 1 %></td>
+                                <td class="col-name"><%= cat.name %></td>
+                                <td class="col-listed">
                                     <label class="switch">
                                         <input type="checkbox" <%= cat.isListed ? 'checked' : '' %> 
                                                onchange="handleToggle('<%= cat._id %>')">
                                         <span class="slider"></span>
                                     </label>
                                 </td>
-                                <td>
+                                <td class="col-actions">
                                     <div class="action-btns">
-                                        <button class="btn-icon" onclick="editCat('<%= cat._id %>')">📝</button>
-                                        <button class="btn-icon btn-delete" onclick="deleteCat('<%= cat._id %>')">🗑️</button>
+                                        <button type="button" class="btn-icon" onclick="openInlineEdit('<%= cat._id %>')">📝Edit</button>
+                                        <button type="button" class="btn-icon btn-delete" onclick="deleteCat('<%= cat._id %>')">🗑️Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -256,7 +253,6 @@
             </table>
         </div>
 
-        <!-- Add New Category Form -->
         <div class="add-card">
             <h2>Add New Category</h2>
             <form action="/admin/add-category" method="POST">
@@ -283,21 +279,99 @@
     </div>
 
     <script>
-        // Example script functions for interactivity
-        function handleToggle(id) {
-            console.log("Toggling status for category ID:", id);
-            // You would use fetch() here to update the status in your database
-        }
+      // Simple, easy-to-read helpers for the category page
 
-        function deleteCat(id) {
-            if(confirm("Are you sure you want to delete this category?")) {
-                window.location.href = `/admin/delete-category/${id}`;
-            }
-        }
+      const getRow = (id) => document.querySelector(`tr[data-id="${id}"]`);
 
-        function editCat(id) {
-            window.location.href = `/admin/edit-category/${id}`;
+      const escapeHtml = (str = '') => String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+      // Fetch helper that ensures we get JSON or throws a clear error
+      async function fetchJson(url, opts = {}) {
+        opts.headers = { ...(opts.headers || {}), Accept: 'application/json' };
+        const res = await fetch(url, opts);
+        const ct = res.headers.get('content-type') || '';
+        if (!ct.includes('application/json')) throw new Error('Session expired or unexpected server response');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Request failed');
+        return data;
+      }
+
+      // Toggle listed state
+      window.handleToggle = async (id) => {
+        try {
+          await fetchJson(`/admin/toggle-category/${id}`, { method: 'PATCH' });
+          showToast('Category status updated', 'success');
+          setTimeout(() => window.location.reload(), 600);
+        } catch (err) {
+          showToast(err.message || 'Failed to update category', 'error');
         }
+      };
+
+      // Delete category
+      window.deleteCat = (id) => {
+        if (confirm('Are you sure you want to delete this category?')) {
+          window.location.href = `/admin/delete-category/${id}`;
+        }
+      };
+
+      // Inline edit: open, cancel, save
+      window.openInlineEdit = (id) => {
+        const row = getRow(id);
+        if (!row) return showToast('Row not found', 'error');
+        if (row.querySelector('.inline-name')) return showToast('Already editing', 'warning');
+
+        row.dataset.prev = row.innerHTML;
+
+        const name = row.querySelector('.col-name').textContent.trim();
+        const listed = !!row.querySelector('.col-listed input[type="checkbox"]')?.checked;
+
+        row.querySelector('.col-name').innerHTML = `<input class="inline-name" value="${escapeHtml(name)}" style="padding:6px;border-radius:4px;border:1px solid #ddd;width:180px">`;
+        row.querySelector('.col-listed').innerHTML = `<label class="switch"><input type="checkbox" class="inline-listed" ${listed ? 'checked' : ''}><span class="slider"></span></label>`;
+        row.querySelector('.col-actions').innerHTML = `<div class="action-btns"><button class="btn-icon" onclick="saveInlineEdit('${id}')">💾</button><button class="btn-icon btn-delete" onclick="cancelInlineEdit('${id}')">✖</button></div>`;
+      };
+
+      window.cancelInlineEdit = (id) => {
+        const row = getRow(id);
+        if (!row || !row.dataset.prev) return;
+        row.innerHTML = row.dataset.prev;
+        delete row.dataset.prev;
+      };
+
+      window.saveInlineEdit = async (id) => {
+        const row = getRow(id);
+        if (!row) return showToast('Row not found', 'error');
+
+        const name = row.querySelector('.inline-name')?.value?.trim();
+        const isListed = !!row.querySelector('.inline-listed')?.checked;
+        if (!name) return showToast('Name is required', 'error');
+
+        try {
+          const data = await fetchJson(`/admin/category/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ categoryName: name, isListed })
+          });
+
+          const cat = data.category;
+
+          row.innerHTML = `
+            <td class="col-index">${row.querySelector('.col-index')?.textContent || ''}</td>
+            <td class="col-name">${escapeHtml(cat.name)}</td>
+            <td class="col-listed"><label class="switch"><input type="checkbox" ${cat.isListed ? 'checked' : ''} onchange="handleToggle('${cat._id}')"><span class="slider"></span></label></td>
+            <td class="col-actions"><div class="action-btns"><button class="btn-icon" onclick="openInlineEdit('${cat._id}')">📝</button><button class="btn-icon btn-delete" onclick="deleteCat('${cat._id}')">🗑️</button></div></td>
+          `;
+
+          showToast('Category updated', 'success');
+        } catch (err) {
+          showToast(err.message || 'Update failed', 'error');
+        }
+      };
     </script>
+    </main>
 </body>
 </html>

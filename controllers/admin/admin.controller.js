@@ -64,7 +64,7 @@ export const AdminDashboard = (req, res) => {
 };
 
 
-// Customer controller functions moved to `controllers/admin/customer.controller.js`
+
 
 // ================= ADMIN LOGOUT ================= //
 
@@ -84,6 +84,6 @@ export const AdminLogout = (req, res) => {
   }
 };
 
-// ====================== category ================ //
+
 
 

@@ -4,6 +4,8 @@
 <!-- BACKGROUND -->
 <div class="login-wallpaper"></div>
 
+<%- include('../partials/toast') %>
+
 <main class="login-wrapper">
 
   <!-- GLASS LOGIN CARD -->
@@ -86,4 +88,13 @@ togglePassword?.addEventListener("click", () => {
 })();
 
 
+</script>
+
+<script>
+  // show logout toast when redirected with ?logout=1
+  if (new URLSearchParams(location.search).get('logout') === '1' && window.showToast) {
+    showToast('Logged out successfully', 'success');
+    // Clean URL to avoid repeated message on refresh
+    history.replaceState(null, '', location.pathname);
+  }
 </script>

@@ -10,8 +10,6 @@
 </head>
 
 <body>
-    <div id="toast-container"></div>
-
 
     <!-- Sidebar -->
  <%- include('../partials/admin/sidebar') %>
@@ -155,34 +153,6 @@
 
 </html>
 
-
-<script>
-  history.pushState(null, null, location.href);
-
-  window.onpopstate = function () {
-    history.pushState(null, null, location.href);
-    window.location.replace('/admin');
-  };
-
-  function showToast(message, type = "success") {
-    const container = document.getElementById("toast-container");
-    if (!container) return;
-
-    const toast = document.createElement("div");
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.remove();
-    }, 3300);
-  }
-</script>
-<% if (typeof toast !== "undefined" && toast) { %>
-<script>
-  showToast("<%= toast.message %>", "<%= toast.type %>");
-</script>
-<% } %>
+<%- include('../partials/toast') %>
 
 

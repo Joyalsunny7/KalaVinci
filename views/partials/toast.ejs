@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/css/toast.css">
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+<script>
+(function(){
+  if (window.showToast) return; // don't override
+
+  window.showToast = function(message, type = 'success', timeout = 3600) {
+    try {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'toast toast-' + (type || 'success');
+      toast.textContent = message;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('toast-hide');
+        setTimeout(() => toast.remove(), 300);
+      }, timeout);
+    } catch (e) {
+      // fallback
+      console.log('Toast:', message, type);
+    }
+  };
+})();
+</script>
+
+<% if (typeof toast !== 'undefined' && toast) { %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.showToast) showToast("<%= toast.message.replace(/"/g, '\\"') %>", "<%= toast.type %>");
+  });
+</script>
+<% } %>
