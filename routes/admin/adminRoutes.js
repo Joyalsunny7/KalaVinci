@@ -76,7 +76,6 @@ router.patch('/toggle-style/:id', adminAuth, toggleStyleListing);
 router.get('/edit-style/:id', adminAuth, editStylePage);
 router.post('/edit-style/:id', adminAuth, updateStyle);
 
-// Fetch style JSON and patch via JSON for inline edits
 router.get('/style/:id', adminAuth, getStyleJson);
 router.patch('/style/:id', adminAuth, updateStyleJson);
 

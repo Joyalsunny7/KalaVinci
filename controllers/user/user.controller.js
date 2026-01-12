@@ -407,7 +407,7 @@ export const addressPage = async (req, res) => {
 
     const addresses = await Address.find({ user: userId });
 
-    res.render("users/address", { addresses });
+    res.render("users/address", { addresses, activePage: 'address' });
   } catch (err) {
     console.error(err);
     res.redirect("/profile");

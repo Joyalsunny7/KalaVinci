@@ -35,8 +35,9 @@ import {
   emailResetPage,
   postEmailReset,
 } from '../../controllers/user/profileController.js';
+
+import { getListedCategories, MyProductsPage, addProduct, updateProduct, deleteProduct } from '../../controllers/user/product.controller.js';
 import {uploadProfilePhoto} from '../../config/multer.js';
-import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
 import { requireUserAuth, guestOnly } from '../../middlewares/auth.js';
 const router = express.Router();
 
@@ -80,10 +81,25 @@ router.route('/home')
 router.route('/collections')
   .get(requireUserAuth, collectionPage);
 
+// Public API: listed categories for product forms
+router.get('/api/categories', getListedCategories);
+
 // ================ profile ================ //
 
 router.route('/profile')
   .get(requireUserAuth, ProfileRedirect);
+
+// My Products (seller-facing product management)
+router.get('/profile/products', requireUserAuth, MyProductsPage);
+
+// Add product (multipart images)
+import { uploadProductImages } from '../../config/multer.js';
+import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
+
+router.post('/profile/products/add', requireUserAuth, handleMulterUpload(uploadProductImages.array('images')), addProduct);
+router.post('/profile/products/:id/edit', requireUserAuth, handleMulterUpload(uploadProductImages.array('images')), updateProduct);
+// Soft-delete product
+router.post('/profile/products/:id/delete', requireUserAuth, deleteProduct);
 
 router.route('/edit')
   .get(getEditProfile);

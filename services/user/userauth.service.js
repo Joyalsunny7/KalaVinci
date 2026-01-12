@@ -16,9 +16,9 @@ export const loginService = async (email, password) => {
     throw new Error(emailValidation.message);
   }
 
-  email = email.toLowerCase().trim();
+  const normalizedEmail = email.toLowerCase().trim();
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: normalizedEmail });
   if (!user) {
     throw new Error('Invalid email or password');
   }
@@ -42,7 +42,7 @@ export const loginService = async (email, password) => {
 // ================= SIGNUP WITH OTP =================
 
 export const signupWithOtp = async (data, session) => {
-  const { name, email, phone, password } = data;
+  const { name, email, phone, password } = data || {};
 
   // Validate inputs
   const nameValidation = validateName(name);
@@ -65,13 +65,13 @@ export const signupWithOtp = async (data, session) => {
     throw new Error(passwordValidation.message);
   }
 
-  
-  const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const existingUser = await User.findOne({ email: normalizedEmail });
   if (existingUser) {
     throw new Error('Email is already registered');
   }
 
-  
   const existingPhone = await User.findOne({ phone });
   if (existingPhone) {
     throw new Error('Phone number is already registered');
@@ -80,15 +80,15 @@ export const signupWithOtp = async (data, session) => {
   const otp = generateOtp();
 
   session.tempUser = {
-    full_name: name,
-    email: email.toLowerCase().trim(),
-    phone,
-    password,
-    otp,
+    full_name: sanitizeInput(name),
+    email: normalizedEmail,
+    phone: sanitizeInput(phone),
+    password, // store raw password temporarily (will be hashed at verify)
+    otp: String(otp),
     otpExpiry: Date.now() + 5 * 60 * 1000,
   };
 
-  await sendOtpEmail(email.toLowerCase().trim(), otp);
+  await sendOtpEmail(normalizedEmail, otp);
 };
 
 
@@ -101,17 +101,15 @@ export const verifyOtpAndSignup = async (otp, session) => {
     throw new Error('Session expired. Please sign up again.');
   }
 
-
   if (Date.now() > tempUser.otpExpiry) {
     session.tempUser = null;
     throw new Error('OTP has expired. Please request a new one.');
   }
 
-  if (tempUser.otp !== otp) {
+  if (String(tempUser.otp) !== String(otp)) {
     throw new Error('Invalid OTP');
   }
 
-  
   const existingUser = await User.findOne({ email: tempUser.email });
   if (existingUser) {
     session.tempUser = null;
@@ -175,7 +173,7 @@ export const sendForgotOtp = async (email, session) => {
 
 export const verifyForgototp = async (otp, session) => {
   let data = session.resetPassword || session.emailReset;
-  
+
   if (!data) {
     throw new Error('OTP session expired. Please request a new OTP.');
   }
@@ -187,27 +185,34 @@ export const verifyForgototp = async (otp, session) => {
     throw new Error('OTP has expired. Please request a new one.');
   }
 
-  if (otp !== data.otp) {
+  if (String(otp) !== String(data.otp)) {
     throw new Error('Invalid OTP');
   }
 
-  return data.email || session.emailReset?.email;
+  // Prefer explicit fields: data.email (resetPassword), data.newEmail (emailReset) or fallback to session
+  return data.email || data.newEmail || session.emailReset?.email;
 };
 
 
 // ================= RESET PASSWORD =================
 
 export const resetPasswordService = async (email, password) => {
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation.valid) throw new Error(passwordValidation.message);
+
   const hashedPassword = await bcrypt.hash(password, 10);
+  const normalizedEmail = email.toLowerCase().trim();
 
   const result = await User.updateOne(
-    { email },
+    { email: normalizedEmail },
     { $set: { password: hashedPassword } }
   );
 
   console.log('UPDATE RESULT:', result);
 
-  if (result.matchedCount === 0) {
+  // Support different mongoose return shapes (matchedCount or n)
+  const matched = (result.matchedCount || result.n || 0);
+  if (matched === 0) {
     throw new Error('User not found');
   }
 

@@ -4,7 +4,196 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin - Styles</title>
-</head>
+  <style>
+    :root {
+      --bg-color: #f8f8f8;
+      --header-border: #8a4fff;
+      --table-header: #a5a5a5;
+      --green-toggle: #4cd964;
+      --red-toggle: #ff3b30;
+      --pink-button: #e8848a;
+      --input-bg: #d9d9d9;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .admin-header {
+      background-color: #ffffff;
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 5px solid var(--header-border);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .breadcrumb .fade { color: #999; }
+
+    .logout-btn {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    /* Main Content Container */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .table-wrapper {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 50px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      background-color: var(--table-header);
+      color: white;
+      padding: 15px;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    tbody td {
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--red-toggle);
+      transition: .4s;
+      border-radius: 20px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px; width: 16px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider { background-color: var(--green-toggle); }
+    input:checked + .slider:before { transform: translateX(22px); }
+
+    .action-btns {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-delete { color: #ff3b30; }
+
+    .add-card {
+      background: #ffffff;
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: var(--card-shadow);
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .add-card h2 {
+      margin-top: 0;
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
+
+    .form-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .input-group input[type="text"] {
+      background-color: var(--input-bg);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      width: 300px;
+      outline: none;
+    }
+
+    .save-container {
+      width: 100%;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .save-btn {
+      background-color: var(--pink-button);
+      color: white;
+      border: none;
+      padding: 12px 60px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .save-btn:hover {
+      background-color: #d9747a;
+    }
+  </style>
 <body>
 
   <%- include('../partials/toast') %>
@@ -40,8 +229,8 @@
                   </td>
                   <td class="col-actions">
                     <div class="action-btns">
-                      <button class="btn-icon" onclick="openInlineEdit('<%= s._id %>')">📝</button>
-                      <button class="btn-icon btn-delete" onclick="deleteStyle('<%= s._id %>')">🗑️</button>
+                      <button class="btn-icon" onclick="openInlineEdit('<%= s._id %>')"> 📝Edit</button>
+                      <button class="btn-icon btn-delete" onclick="deleteStyle('<%= s._id %>')">🗑️Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -119,7 +308,7 @@
 
       row.querySelector('.col-name').innerHTML = `<input class="inline-name" value="${escapeHtml(name)}" style="padding:6px;border-radius:4px;border:1px solid #ddd;width:180px">`;
       row.querySelector('.col-listed').innerHTML = `<label class="switch"><input type="checkbox" class="inline-listed" ${listed ? 'checked' : ''}><span class="slider"></span></label>`;
-      row.querySelector('.col-actions').innerHTML = `<div class="action-btns"><button class="btn-icon" onclick="saveInlineEdit('${id}')">💾</button><button class="btn-icon btn-delete" onclick="cancelInlineEdit('${id}')">✖</button></div>`;
+      row.querySelector('.col-actions').innerHTML = `<div class="action-btns"><button class="btn-icon" onclick="saveInlineEdit('${id}')">💾Save</button><button class="btn-icon btn-delete" onclick="cancelInlineEdit('${id}')">✖Close</button></div>`;
     };
 
     window.cancelInlineEdit = (id) => {

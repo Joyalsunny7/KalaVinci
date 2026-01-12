@@ -7,14 +7,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-const uploadDir = path.join(__dirname, '../public/uploads/users');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+const userUploadDir = path.join(__dirname, '../public/uploads/users');
+if (!fs.existsSync(userUploadDir)) {
+  fs.mkdirSync(userUploadDir, { recursive: true });
 }
 
-const storage = multer.diskStorage({
+const productUploadDir = path.join(__dirname, '../public/uploads/products');
+if (!fs.existsSync(productUploadDir)) {
+  fs.mkdirSync(productUploadDir, { recursive: true });
+}
+
+const userStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, userUploadDir);
   },
   filename: (req, file, cb) => {
     if (!req.session || !req.session.userId) {
@@ -26,10 +31,20 @@ const storage = multer.diskStorage({
   }
 });
 
-const fileFilter = (req, file, cb) => {
- 
-  if (file.mimetype.startsWith('image/')) {
+const productStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, productUploadDir);
+  },
+  filename: (req, file, cb) => {
+    const userPart = (req.session && req.session.userId) ? req.session.userId : 'anon';
+    const ext = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `${userPart}-prod-${uniqueSuffix}${ext}`);
+  }
+});
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
@@ -42,9 +57,18 @@ const fileFilter = (req, file, cb) => {
 };
 
 export const uploadProfilePhoto = multer({
-  storage,
+  storage: userStorage,
   fileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024,
+  }
+});
+
+export const uploadProductImages = multer({
+  storage: productStorage,
+  fileFilter,
+  limits: {
+    fileSize: 6 * 1024 * 1024, // per file
+    files: 50, // allow up to 50 files per upload
   }
 });

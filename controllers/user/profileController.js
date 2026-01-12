@@ -89,13 +89,13 @@ export const postEmailReset = async (req, res) => {
 export const ProfileRedirect = async (req, res) => {
   if (!req.session.userId) return res.redirect("/login");
   const user = await User.findById(req.session.userId);
-  res.render("users/ProfilePage", { user });
+  res.render("users/ProfilePage", { user, activePage: 'profile' });
 };
 
 export const getEditProfile = async (req, res) => {
   if (!req.session.userId) return res.redirect("/login");
   const user = await getUserById(req.session.userId);
-  res.render("users/editProfile", { user });
+  res.render("users/editProfile", { user, activePage: 'profile' });
 };
 
 export const updateProfile = async (req, res) => {
