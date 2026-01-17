@@ -8,32 +8,61 @@ import {
 } from "../../services/admin/category.service.js";
 import { sanitizeInput } from "../../utils/validators.js";
 
-// ================= Admin Category Page ================= //
 export const AdminCategoryPage = async (req, res) => {
   try {
-    const categories = await getAllCategoriesService();
+    const page = Number(req.query.page) || 1;
+    const limit = 3;
+    const skip = (page - 1) * limit;
+
+    const sort = req.query.sort || 'newest'; // 👈 READ SORT
+
+    let allCategories = await getAllCategoriesService();
+
+    if (sort === 'newest') {
+      allCategories.sort((a, b) => b.createdAt - a.createdAt);
+    }
+
+    if (sort === 'oldest') {
+      allCategories.sort((a, b) => a.createdAt - b.createdAt);
+    }
+
+    const totalCategories = allCategories.length;
+    const totalPages = Math.ceil(totalCategories / limit);
+
+    const categories = allCategories.slice(skip, skip + limit);
+
     const toast = req.session.toast;
     delete req.session.toast;
 
     res.render("admin/category", {
       activePage: "category",
       categories,
+      currentPage: page,
+      totalPages,
+      req,          // 👈 required for search + sort + pagination
       toast,
     });
+
   } catch (err) {
     res.render("admin/category", {
       activePage: "category",
       categories: [],
+      currentPage: 1,
+      totalPages: 1,
+      req,
       toast: { type: "error", message: "Failed to load categories" },
     });
   }
 };
 
+
 // ================= Add Category ================= //
 export const addCategory = async (req, res) => {
   try {
     const name = sanitizeInput(req.body.categoryName || "");
-    const isListed = !!req.body.isListed;
+  const isListed =
+  typeof req.body.isListed === "undefined" ? true : !!req.body.isListed;
+
     const adminId = req.session.adminId || null;
 
     await addCategoryService({ name, isListed, createdBy: adminId });

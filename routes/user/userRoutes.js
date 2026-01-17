@@ -1,32 +1,34 @@
-import express from 'express';
+import express from "express";
+
+/* ================= AUTH CONTROLLERS ================= */
 import {
-  //auth
   Login,
   PostLogin,
   Logout,
   Signup,
   PostSignup,
-  //otp
+
   VerifyOtpPage,
   PostVerifyOtp,
-  //forgot
+  resendOtp,
+
   ForgotPassword,
   PostForgotPassword,
   ResetPasswordPage,
   PostResetPassword,
-  //home
+
   HomePage,
   collectionPage,
-  //address
+
   addAddressPage,
   addAddress,
   editAddressPage,
   updateAddress,
   addressPage,
   deleteAddress,
-  resendOtp
-} from '../../controllers/user/user.controller.js';
+} from "../../controllers/user/user.controller.js";
 
+/* ================= PROFILE ================= */
 import {
   ProfileRedirect,
   getEditProfile,
@@ -34,107 +36,136 @@ import {
   startEmailReset,
   emailResetPage,
   postEmailReset,
-} from '../../controllers/user/profileController.js';
+} from "../../controllers/user/profileController.js";
 
-import { getListedCategories, MyProductsPage, addProduct, updateProduct, deleteProduct } from '../../controllers/user/product.controller.js';
-import {uploadProfilePhoto} from '../../config/multer.js';
-import { requireUserAuth, guestOnly } from '../../middlewares/auth.js';
+/* ================= PRODUCTS ================= */
+import {
+  getListedCategories,
+  getListedStyles,
+  MyProductsPage,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  getProductForEdit,
+} from "../../controllers/user/product.controller.js";
+
+/* ================= MIDDLEWARES ================= */
+import { requireUserAuth, guestOnly } from "../../middlewares/auth.js";
+import { uploadProfilePhoto, uploadProductImages } from "../../config/multer.js";
+import { handleMulterUpload } from "../../middlewares/multerErrorHandler.js";
+
 const router = express.Router();
 
-/* ================= AUTH ================= */
-
-router.route('/login')
+/* =====================================================
+   AUTH
+===================================================== */
+router.route("/login")
   .get(guestOnly, Login)
   .post(PostLogin);
 
-router.route('/signup')
-  .get(Signup)
+router.route("/signup")
+  .get(guestOnly, Signup)
   .post(PostSignup);
 
-router.route('/logout')
-  .get(Logout) 
+router.get("/logout", Logout);
 
-/* ================= OTP ================= */
-
-router.route('/verify-otp')
+/* =====================================================
+   OTP
+===================================================== */
+router.route("/verify-otp")
   .get(VerifyOtpPage)
   .post(PostVerifyOtp);
 
-router.route('/resend-otp')
-  .post(resendOtp);
+router.post("/resend-otp", resendOtp);
 
-/* ================= FORGOT PASSWORD ================= */
-
-router.route('/forgot-password')
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+router.route("/forgot-password")
   .get(ForgotPassword)
   .post(PostForgotPassword);
 
-router.route('/reset-password')
+router.route("/reset-password")
   .get(ResetPasswordPage)
   .post(PostResetPassword);
 
-/* ================= PROTECTED PAGES ================= */
+/* =====================================================
+   PROTECTED PAGES
+===================================================== */
+router.get("/home", requireUserAuth, HomePage);
+router.get("/collections", requireUserAuth, collectionPage);
 
-router.route('/home')
-  .get(requireUserAuth, HomePage);
+/* =====================================================
+   PUBLIC APIs (FOR FORMS)
+===================================================== */
+router.get("/api/categories", getListedCategories);
+router.get("/api/styles", getListedStyles);
 
-router.route('/collections')
-  .get(requireUserAuth, collectionPage);
+/* =====================================================
+   PROFILE
+===================================================== */
+router.get("/profile", requireUserAuth, ProfileRedirect);
 
-// Public API: listed categories for product forms
-router.get('/api/categories', getListedCategories);
+router.get("/profile/edit", requireUserAuth, getEditProfile);
 
-// ================ profile ================ //
+router.post(
+  "/profile/update",
+  requireUserAuth,
+  handleMulterUpload(uploadProfilePhoto.single("profileImage")),
+  updateProfile
+);
 
-router.route('/profile')
-  .get(requireUserAuth, ProfileRedirect);
-
-// My Products (seller-facing product management)
-router.get('/profile/products', requireUserAuth, MyProductsPage);
-
-// Add product (multipart images)
-import { uploadProductImages } from '../../config/multer.js';
-import { handleMulterUpload } from '../../middlewares/multerErrorHandler.js';
-
-router.post('/profile/products/add', requireUserAuth, handleMulterUpload(uploadProductImages.array('images')), addProduct);
-router.post('/profile/products/:id/edit', requireUserAuth, handleMulterUpload(uploadProductImages.array('images')), updateProduct);
-// Soft-delete product
-router.post('/profile/products/:id/delete', requireUserAuth, deleteProduct);
-
-router.route('/edit')
-  .get(getEditProfile);
-
-// Photo upload route removed - handled in update route
-
-router.route('/update')
-  .post(
-    handleMulterUpload(uploadProfilePhoto.single('profileImage')),
-    updateProfile
-  );
-
-//==============email===============//
-
-router.route('/reset-email')
-  .get(startEmailReset);
-
-router.route('/email-reset')
+/* ================= EMAIL RESET ================= */
+router.get("/reset-email", requireUserAuth, startEmailReset);
+router.route("/email-reset")
   .get(emailResetPage)
   .post(postEmailReset);
 
-//==============   address   ===============//
+/* =====================================================
+   MY PRODUCTS (SELLER DASHBOARD)
+===================================================== */
+router.get("/profile/products", requireUserAuth, MyProductsPage);
 
-router.route('/address')
-  .get(requireUserAuth, addressPage);
+// GET product for editing (must be before :id route)
+router.get(
+  "/api/products/:id/edit",
+  requireUserAuth,
+  getProductForEdit
+);
 
-router.route('/address/add')
-  .get(addAddressPage)
-  .post(addAddress);
+router.post(
+  "/profile/products",
+  requireUserAuth,
+  handleMulterUpload(uploadProductImages.array("images")),
+  addProduct
+);
 
-router.route('/address/edit/:id')
-  .get(editAddressPage)
-  .post(updateAddress);
+router.post(
+  "/profile/products/:id",
+  requireUserAuth,
+  handleMulterUpload(uploadProductImages.array("images")),
+  updateProduct
+);
 
-  router.route('/address/delete/:id')
-  .post(deleteAddress)
+router.delete(
+  "/profile/products/:id",
+  requireUserAuth,
+  deleteProduct
+);
+
+/* =====================================================
+   ADDRESS
+===================================================== */
+router.get("/address", requireUserAuth, addressPage);
+
+router.route("/address/add")
+  .get(requireUserAuth, addAddressPage)
+  .post(requireUserAuth, addAddress);
+
+router.route("/address/edit/:id")
+  .get(requireUserAuth, editAddressPage)
+  .post(requireUserAuth, updateAddress);
+
+router.post("/address/delete/:id", requireUserAuth, deleteAddress);
 
 export default router;

@@ -10,15 +10,40 @@ import { sanitizeInput } from "../../utils/validators.js";
 
 export const AdminStylePage = async (req, res) => {
   try {
-    const styles = await getAllStylesService();
-    const toast = req.session.toast;
-    delete req.session.toast;
+    const page = Number(req.query.page) || 1;
+    const limit = 3;
+    const skip = (page - 1) * limit;
 
-    res.render("admin/style", { activePage: "categories", styles, toast });
+    const sort = req.query.sort || "newest";
+
+    const allStyles = await getAllStylesService(sort);
+
+    const totalStyles = allStyles.length;
+    const totalPages = Math.ceil(totalStyles / limit);
+
+    const styles = allStyles.slice(skip, skip + limit);
+
+    res.render("admin/style", {
+      activePage: "categories",
+      styles,
+      currentPage: page,
+      totalPages,
+      req
+    });
   } catch (err) {
-    res.render("admin/style", { activePage: "categories", styles: [], toast: { type: "error", message: "Failed to load styles" } });
+    res.render("admin/style", {
+      activePage: "categories",
+      styles: [],
+      currentPage: 1,
+      totalPages: 1,
+      req,
+      query: req.query,
+      toast: { type: "error", message: "Failed to load styles" }
+    });
   }
 };
+
+
 
 export const addStyle = async (req, res) => {
   try {

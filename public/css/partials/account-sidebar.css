@@ -7,6 +7,12 @@
   align-items: flex-start;
 }
 
+.main-content {
+  flex: 1;
+  padding-top: 24px;  
+  padding-right: 24px;
+}
+
 .sidebar {
   width: 260px;
   background-color: #ffffff;

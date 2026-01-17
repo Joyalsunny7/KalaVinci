@@ -1,13 +1,15 @@
 <link rel="stylesheet" href="/css/partials/admin/sidebar.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet">
 
-<%- include('../../partials/toast') %>
 <aside class="sidebar">
 
-  <!-- Header -->
+  <!-- ================= HEADER ================= -->
   <div class="sidebar-header">
-    <button class="hamburger" id="sidebarToggle">
+    <button class="hamburger" id="sidebarToggle" aria-label="Toggle sidebar">
       <i class="fa-solid fa-bars"></i>
     </button>
 
@@ -20,97 +22,99 @@
     </div>
   </div>
 
-  <!-- Navigation -->
+  <!-- ================= NAV ================= -->
   <nav class="sidebar-nav">
     <ul>
 
       <li class="<%= activePage === 'dashboard' ? 'active' : '' %>">
         <a href="/admin/dashboard">
-          <i class="fa-solid fa-gauge"></i><span>Dashboard</span>
+          <i class="fa-solid fa-gauge"></i>
+          <span>Dashboard</span>
         </a>
       </li>
 
       <li class="<%= activePage === 'products' ? 'active' : '' %>">
         <a href="/admin/products">
-          <i class="fa-solid fa-box"></i><span>Products</span>
+          <i class="fa-solid fa-box"></i>
+          <span>Products</span>
         </a>
       </li>
 
-      <li class="has-submenu <%= activePage === 'orders' ? 'active' : '' %>">
-        <a href="#">
-          <i class="fa-solid fa-cart-shopping"></i><span>Orders</span>
+      <li class="<%= activePage === 'orders' ? 'active' : '' %>">
+        <a href="/admin/orders">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span>Orders</span>
         </a>
-        <ul class="submenu">
-          <li><a href="/admin/orders">Order Details</a></li>
-        </ul>
       </li>
 
-      <li class="has-submenu <%= activePage === 'users' ? 'active' : '' %>">
-        <a href="#">
-          <i class="fa-solid fa-users"></i><span>Users</span>
+      <li class="<%= activePage === 'users' ? 'active' : '' %>">
+        <a href="/admin/customers">
+          <i class="fa-solid fa-users"></i>
+          <span>Users</span>
         </a>
-        <ul class="submenu">
-          <li><a href="/admin/customers">User Management</a></li>
-        </ul>
       </li>
 
       <li class="<%= activePage === 'reports' ? 'active' : '' %>">
         <a href="/admin/reports">
-          <i class="fa-solid fa-chart-line"></i><span>Reports</span>
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Reports</span>
         </a>
       </li>
 
-      <li class="has-submenu <%= activePage === 'coupons' ? 'active' : '' %>">
+      <li class="<%= activePage === 'coupons' ? 'active' : '' %>">
+        <a href="/admin/coupons">
+          <i class="fa-solid fa-ticket"></i>
+          <span>Coupons</span>
+        </a>
+      </li>
+
+      <!-- ======= CATALOG (WITH SPACING) ======= -->
+      <li class="has-submenu <%= ['categories','styles','artists'].includes(activePage) ? 'active' : '' %>">
         <a href="#">
-          <i class="fa-solid fa-ticket"></i><span>Coupons</span>
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Catalog</span>
         </a>
-        <ul class="submenu">
-          <li><a href="/admin/coupons">Coupon Management</a></li>
-        </ul>
-      </li>
 
-      <li class="has-submenu <%= activePage === 'categories' ? 'active' : '' %>">
-        <a href="/admin/categories">
-          <i class="fa-solid fa-layer-group"></i><span>Categories</span>
-        </a>
         <ul class="submenu">
-          <li><a href="/admin/categories">Category Management</a></li>
-        </ul>
-        <ul class="submenu">
-          <li><a href="/admin/styles">Style Management</a></li>
-        </ul>
-        <ul class="submenu">
-          <li><a href="/admin/offers">Artist Management</a></li>
+          <li class="<%= activePage === 'categories' ? 'active' : '' %>">
+            <a href="/admin/categories">Category Management</a>
+          </li>
+
+          <li class="<%= activePage === 'styles' ? 'active' : '' %>">
+            <a href="/admin/styles">Style Management</a>
+          </li>
+
+          <li class="<%= activePage === 'artists' ? 'active' : '' %>">
+            <a href="/admin/artists">Artist Management</a>
+          </li>
         </ul>
       </li>
 
       <li class="<%= activePage === 'banners' ? 'active' : '' %>">
         <a href="/admin/banners">
-          <i class="fa-solid fa-image"></i><span>Banners</span>
+          <i class="fa-solid fa-image"></i>
+          <span>Banners</span>
         </a>
       </li>
 
-      <li class="has-submenu <%= activePage === 'offers' ? 'active' : '' %>">
-        <a href="#">
-          <i class="fa-solid fa-tag"></i><span>Offers</span>
+      <li class="<%= activePage === 'offers' ? 'active' : '' %>">
+        <a href="/admin/offers">
+          <i class="fa-solid fa-tag"></i>
+          <span>Offers</span>
         </a>
-        <ul class="submenu">
-          <li><a href="/admin/offers">Offer Management</a></li>
-        </ul>
       </li>
 
-      <li class="has-submenu <%= activePage === 'shipments' ? 'active' : '' %>">
-        <a href="#">
-          <i class="fa-solid fa-truck"></i><span>Shipments</span>
+      <li class="<%= activePage === 'shipments' ? 'active' : '' %>">
+        <a href="/admin/shipments">
+          <i class="fa-solid fa-truck"></i>
+          <span>Shipments</span>
         </a>
-        <ul class="submenu">
-          <li><a href="/admin/shipments">Shipment Resolve</a></li>
-        </ul>
       </li>
 
       <li class="logout">
         <a href="/admin/logout">
-          <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Logout</span>
         </a>
       </li>
 
@@ -118,31 +122,31 @@
   </nav>
 </aside>
 
+<!-- ================= SCRIPT ================= -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-  const sidebar = document.querySelector(".sidebar");
-  const toggle = document.getElementById("sidebarToggle");
-  const submenuLinks = document.querySelectorAll(".has-submenu > a");
+    const sidebar = document.querySelector(".sidebar");
+    const toggle = document.getElementById("sidebarToggle");
+    const submenuLinks = document.querySelectorAll(".has-submenu > a");
 
-  toggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-  });
+    toggle.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+      document.body.classList.toggle("sidebar-collapsed");
+    });
 
-  submenuLinks.forEach(link => {
-    link.addEventListener("click", e => {
-      if (sidebar.classList.contains("collapsed")) return;
+    submenuLinks.forEach(link => {
+      link.addEventListener("click", e => {
+        if (sidebar.classList.contains("collapsed")) return;
+        e.preventDefault();
 
-      e.preventDefault();
-      const parent = link.parentElement;
-      const open = parent.classList.contains("active");
+        const parent = link.closest(".has-submenu");
+        const isOpen = parent.classList.contains("active");
 
-      document.querySelectorAll(".has-submenu").forEach(i =>
-        i.classList.remove("active")
-      );
+        document.querySelectorAll(".has-submenu")
+          .forEach(item => item.classList.remove("active"));
 
-      if (!open) parent.classList.add("active");
+        if (!isOpen) parent.classList.add("active");
+      });
     });
   });
-});
-
 </script>

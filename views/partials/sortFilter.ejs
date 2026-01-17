@@ -1,0 +1,36 @@
+<style>
+  .sort-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sort-filter select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="sort-filter">
+  <form method="GET">
+    <% Object.entries(query || {}).forEach(([key, val]) => { %>
+      <% if (key !== 'sort' && key !== 'page') { %>
+        <input type="hidden" name="<%= key %>" value="<%= val %>">
+      <% } %>
+    <% }) %>
+
+    <select name="sort" onchange="this.form.submit()">
+      <option value="">Sort by</option>
+      <option value="newest" <%= query?.sort === 'newest' ? 'selected' : '' %>>
+        Newest first
+      </option>
+      <option value="oldest" <%= query?.sort === 'oldest' ? 'selected' : '' %>>
+        Oldest first
+      </option>
+    </select>
+  </form>
+</div>

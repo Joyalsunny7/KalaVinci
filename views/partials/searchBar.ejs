@@ -1,0 +1,79 @@
+<style>
+  .search-bar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+   margin: 0 !important;
+  padding: 0 !important;
+}
+
+.search-bar form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input-wrapper input {
+  min-width: 240px;
+  padding: 10px 34px 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f4f4f4;
+  font-size: 14px;
+}
+
+.search-input-wrapper input:focus {
+  border-color: #afedc4;
+  background: #fff;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #999;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.clear-btn:hover {
+  color: #ef4444;
+}
+
+.search-bar button {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  background: #81c1a0;
+  color: white;
+  cursor: pointer;
+}
+
+</style>
+
+<div class="search-bar">
+  <form method="GET">
+    <div class="search-input-wrapper">
+      <input
+        type="text"
+        name="search"
+        placeholder="<%= placeholder || 'Search...' %>"
+        value="<%= query?.search || '' %>"
+      />
+
+      <% if (query?.search) { %>
+        <a href="<%= clearUrl || '?' %>" class="clear-btn">×</a>
+      <% } %>
+    </div>
+
+    <button type="submit">Search</button>
+  </form>
+</div>

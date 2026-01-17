@@ -1,0 +1,89 @@
+<%
+/* ===============================
+   PAGINATION LOGIC
+================================ */
+const qs = Object.entries(query || {})
+  .filter(([k, v]) => v && k !== 'page')
+  .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+  .join('&');
+
+const groupSize = 5;
+const currentGroup = Math.ceil(currentPage / groupSize);
+const totalGroups = Math.ceil(totalPages / groupSize);
+
+const startPage = (currentGroup - 1) * groupSize + 1;
+const endPage = Math.min(startPage + groupSize - 1, totalPages);
+%>
+
+<!-- ===============================
+     PAGINATION STYLES
+================================ -->
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 30px 0 20px;
+  }
+
+  .page-btn {
+    min-width: 36px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .page-btn:hover {
+    background: #f2f2f2;
+    border-color: #bbb;
+  }
+
+  .page-btn.active {
+    background: #629553;
+    color: #fff;
+    border-color: #599a55;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .page-btn.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+</style>
+
+<!-- ===============================
+     PAGINATION MARKUP
+================================ -->
+<% if (totalPages > 1) { %>
+  <nav class="pagination">
+
+    <!-- Prev -->
+    <a class="page-btn <%= currentGroup === 1 ? 'disabled' : '' %>"
+       href="?page=<%= startPage - 1 %><%= qs ? '&' + qs : '' %>">
+      Prev
+    </a>
+
+    <!-- Page Numbers -->
+    <% for (let i = startPage; i <= endPage; i++) { %>
+      <a href="?page=<%= i %><%= qs ? '&' + qs : '' %>"
+         class="page-btn <%= i === currentPage ? 'active' : '' %>">
+        <%= i %>
+      </a>
+    <% } %>
+
+    <!-- Next -->
+    <a class="page-btn <%= currentGroup === totalGroups ? 'disabled' : '' %>"
+       href="?page=<%= endPage + 1 %><%= qs ? '&' + qs : '' %>">
+      Next
+    </a>
+
+  </nav>
+<% } %>

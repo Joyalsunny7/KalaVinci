@@ -7,23 +7,16 @@ const styleSchema = new Schema(
     name: {
       type: String,
       required: true,
+      trim: true,
       unique: true,
-      trim: true
     },
-
-    isListed: {
-      type: Boolean,
-      default: true
+    status: {
+      type: String,
+      enum: ["ACTIVE", "INACTIVE", "DELETED"],
+      default: "ACTIVE",
     },
-
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: "Admin"
-    }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 );
 
 export default model("Style", styleSchema);

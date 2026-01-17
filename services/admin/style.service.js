@@ -1,19 +1,28 @@
-import Style from "../../models/admin/styleSchema.js";
+import Style from "../../models/admin/styleSchema.js"; // Adjust if your file is named differently
 import { sanitizeInput, validateObjectId } from "../../utils/validators.js";
 
-export const getAllStylesService = async () => {
-  const styles = await Style.find().sort({ createdAt: -1 }).lean();
-  return styles;
+export const getAllStylesService = async (sort = 'newest') => {
+  const sortQuery = sort === 'oldest'
+    ? { createdAt: 1 }
+    : { createdAt: -1 };
+
+  return Style.find().sort(sortQuery);
 };
 
-export const addStyleService = async ({ name, isListed = true, createdBy = null }) => {
-  if (!name || !name.trim()) throw new Error("Style name is required");
+export const addStyleService = async ({ name, status = 'ACTIVE' }) => {
+  if (!name || !name.trim()) {
+    throw new Error("Style name is required");
+  }
 
   const cleanName = sanitizeInput(name);
-  const existing = await Style.findOne({ name: { $regex: `^${cleanName}$`, $options: "i" } });
-  if (existing) throw new Error("Style already exists");
 
-  const style = new Style({ name: cleanName, isListed: !!isListed, createdBy });
+  // Prevent duplicates (case-insensitive)
+  const existing = await Style.findOne({ name: { $regex: `^${cleanName}$`, $options: "i" } });
+  if (existing) {
+    throw new Error("Style already exists");
+  }
+
+  const style = new Style({ name: cleanName, status });
   await style.save();
   return style;
 };
@@ -39,13 +48,13 @@ export const getStyleByIdService = async (id) => {
   return style;
 };
 
-export const updateStyleService = async (id, { name, isListed }) => {
+export const updateStyleService = async (id, { name, status }) => {
   const { valid } = validateObjectId(id);
   if (!valid) throw new Error("Invalid style ID");
 
   const updates = {};
   if (typeof name === "string") updates.name = sanitizeInput(name);
-  if (typeof isListed !== "undefined") updates.isListed = !!isListed;
+  if (typeof status === "string") updates.status = status;
 
   const style = await Style.findByIdAndUpdate(id, updates, { new: true });
   if (!style) throw new Error("Style not found");
@@ -60,8 +69,8 @@ export const toggleStyleListingService = async (id) => {
   const style = await Style.findById(id);
   if (!style) throw new Error("Style not found");
 
-  style.isListed = !style.isListed;
+  style.status = style.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
   await style.save();
 
-  return { id: style._id, isListed: style.isListed };
+  return { id: style._id, status: style.status };
 };

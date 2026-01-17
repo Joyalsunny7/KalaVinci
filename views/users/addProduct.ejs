@@ -1,370 +1,716 @@
 <%- include('../partials/header', { title: 'My Products | Kala Vinci' }) %>
 <%- include('../partials/accountHeader') %>
 
+<!-- ===============================
+ CROPPER CSS
+================================ -->
+<link rel="stylesheet" href="https://unpkg.com/cropperjs@1.6.1/dist/cropper.min.css" />
+
 <style>
-    /* page-specific styles */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+  /* ===============================
+   BASE
+================================ */
+  * {
+    box-sizing: border-box;
+  }
 
-    /* Header */
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .header h1 { font-size: 1.4rem; font-weight: 700; }
-    .btn-add { background: #4a0404; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+  }
 
-    /* Stats Grid */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  /* ===============================
+   LAYOUT
+================================ */
+  .main-layout {
+    display: flex;
+    min-height: 100vh;
+  }
 
-    /* Ensure product area fills remaining space next to sidebar */
-    .products-layout { flex: 1; display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; }
+  .page-container {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
 
-    @media (max-width: 900px) {
-      .products-layout { grid-template-columns: 1fr; }
+  /* ===============================
+   HEADER
+================================ */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .btn-add {
+    background: #4a0404;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ===============================
+   STATS
+================================ */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid #eee;
+  }
+
+  .stat-card span {
+    font-size: .7rem;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 700;
+  }
+
+  .stat-card h2 {
+    margin: 8px 0 0;
+    font-size: 2rem;
+  }
+
+  /* ===============================
+   GRID
+================================ */
+  .products-layout {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 900px) {
+    .products-layout {
+      grid-template-columns: 1fr;
     }
-    .stat-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    .stat-info span { font-size: 0.7rem; color: #888; font-weight: bold; text-transform: uppercase; display: block; }
-    .stat-info h2 { font-size: 2.2rem; margin-top: 5px; }
-    .stat-icon { font-size: 1.5rem; opacity: 0.5; }
+  }
 
-    /* Layout Columns (product area only) */
-    .products-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; }
-    .section-title { font-size: 0.95rem; margin-bottom: 20px; font-weight: 700; color: #444; }
+  /* ===============================
+   PRODUCT LIST
+================================ */
+  .product-list {
+    display: grid;
+    gap: 16px;
+  }
 
-    /* Product List Card - show as horizontal grid of compact cards */
-    .product-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; align-items: start; }
-    .product-card { background: #e2e2e2; border-radius: 12px; display: flex; flex-direction: column; padding: 12px; position: relative; align-items: flex-start; transition: 0.2s; border: 2px solid transparent; min-height: 100px; max-height: 140px; overflow: hidden; }
-    .product-img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background: #ccc; }
-    .product-details { flex-grow: 1; width: 100%; }
-    .product-details h4 { font-size: 0.95rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .product-details p { font-size: 0.75rem; color: #666; margin-bottom: 8px; line-height: 1.2; max-height: 2.4em; overflow: hidden; text-overflow: ellipsis; }
-    .product-meta { font-size: 0.8rem; font-weight: 500; display:flex; gap:8px; align-items:center; }
-    .product-meta span { margin-right: 10px; }
+  .product-card {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px;
+    gap: 14px;
+    background: #ededed;
+    border-radius: 16px;
+    padding: 16px;
+    align-items: center;
+  }
 
-    /* Actions and badges positioned to avoid layout overlap on compact cards */
-    .status-badge { position: absolute; top: 10px; right: 10px; padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: bold; color: white; text-transform: uppercase; }
-    .action-icons { position: absolute; bottom: 10px; right: 10px; display:flex; gap:8px; font-size:1rem; }
+  .product-card.inactive {
+    opacity: .6;
+  }
 
-    @media (max-width: 900px) {
-      .product-list { grid-template-columns: 1fr; }
-      .product-img { height: 140px; }
-      .product-card { max-height: none; }
-    }
+  .product-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
 
-    /* Badges & Actions */
-    .status-badge { position: absolute; top: 15px; right: 55px; padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: bold; color: white; text-transform: uppercase; }
-    .status-active { background: #2ecc71; }
-    .status-sold { background: #e74c3c; }
-    .action-icons { display: flex; flex-direction: column; gap: 12px; margin-left: 10px; cursor: pointer; font-size: 1.1rem; }
+  .product-details h4 {
+    margin: 0 0 4px;
+    font-size: .95rem;
+    font-weight: 700;
+  }
 
-    /* Form Sidebar */
-    .edit-panel { background: #dcdcdc; padding: 25px; border-radius: 15px; position: sticky; top: 20px; }
-    .edit-panel h3 { font-size: 1rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #bbb; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: #555; margin-bottom: 6px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 12px; border: none; border-radius: 8px; background: white; font-size: 0.9rem; }
-    .form-group textarea { height: 90px; resize: none; }
-    .image-placeholder { background: #f0f0f0; height: 80px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 2px dashed #bbb; cursor: pointer; }
-    
-    .form-actions { display: flex; justify-content: space-between; margin-top: 25px; }
-    .btn-cancel { background: #95a5a6; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    .btn-save { background: #ff7675; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+  .product-details p {
+    margin: 0;
+    font-size: .78rem;
+    color: #555;
+  }
+
+  /* ===============================
+   ACTIONS
+================================ */
+  .action-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    font-size: .8rem;
+    cursor: pointer;
+  }
+
+  /* Toggle */
+  .switch {
+    position: relative;
+    width: 42px;
+    height: 22px;
+  }
+
+  .switch input {
+    display: none;
+  }
+
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: #b0b0b0;
+    border-radius: 20px;
+    transition: .3s;
+  }
+
+  .slider::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: .3s;
+  }
+
+  .switch input:checked+.slider {
+    background: #2ecc71;
+  }
+
+  .switch input:checked+.slider::before {
+    transform: translateX(20px);
+  }
+
+  /* ===============================
+   FORM PANEL
+================================ */
+  .edit-panel {
+    background: #e5e5e5;
+    padding: 30px;
+    border-radius: 20px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .edit-panel h3 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-size: .75rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .preview-grid img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .form-actions {
+    margin-top: 20px;
+  }
+
+  .btn-save {
+    width: 100%;
+    background: #ff7675;
+    color: #fff;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-save:hover {
+    background: #e65c5c;
+  }
+
+  /* Loading state */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 </style>
 
-<main class="container main-layout">
-            <%- include('../partials/accountSidebar') %>
+<main class="main-layout">
+  <%- include('../partials/accountSidebar') %>
 
-            <div class="products-layout">
-                <header class="header">
-                    <h1>Product Management</h1>
-                    <button class="btn-add" id="addNewBtn">+ ADD NEW PRODUCT</button>
-                </header>
+  <div class="page-container">
 
-                <!-- STATS SECTION (DYNAMIC EJS) -->
-                <section class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span>Total Products</span>
-                            <h2 id="stat-total"><%= stats.total %></h2>
-                        </div>
-                        <div class="stat-icon">📦</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span>Active Listing</span>
-                            <h2><%= stats.active %></h2>
-                        </div>
-                        <div class="stat-icon">🟢</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span>Low Stock</span>
-                            <h2 style="color: #e74c3c;"><%= stats.low < 10 ? '0' + stats.low : stats.low %></h2>
-                        </div>
-                        <div class="stat-icon">⚠️</div>
-                    </div>
-                </section>
-            
-            <!-- PRODUCT LIST -->
-            <section>
-                <h3 class="section-title">Your Products</h3>
-                <div class="product-list" id="productList">
-                    <% products.forEach((product, index) => { %>
-                        <div class="product-card" data-id="<%= product._id %>" data-index="<%= index %>">
-                            <img src="<%= (product.images && product.images.length) ? product.images[0] : '/images/placeholder.png' %>" class="product-img" alt="product">
-                            <div class="product-details">
-                                <h4><%= product.name %></h4>
-                                <p><%= product.description %></p>
-                                <div class="product-meta">
-                                    <span class="price-val">Price: <%= product.price %></span>
-                                    <span class="size-val">Size: <%= product.size || '—' %></span>
-                                </div>
-                            </div>
-                            <span class="status-badge <%= product.status === 'ACTIVE' ? 'status-active' : 'status-sold' %>">
-                                <%= product.status %>
-                            </span>
-                            <div class="action-icons">
-                                <span class="edit-trigger" title="Edit">📝Edit</span>
-                                <span class="delete-trigger" title="Delete">🗑️Delete</span>
-                            </div>
-                        </div>
-                    <% }); %>
-                </div>
-            </section>
+    <!-- HEADER -->
+    <div class="page-header">
+      <h1>Product Management</h1>
+      <button class="btn-add" id="addNewBtn">+ ADD NEW PRODUCT</button>
+    </div>
 
-            <!-- EDIT/ADD FORM -->
-            <aside>
-                <div class="edit-panel">
-                    <h3 id="formTitle">Edit Products</h3>
-                    <form id="productForm" action="/profile/products/add" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label>Product Name</label>
-                            <input type="text" id="fName" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea id="fDesc" name="description" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Price</label>
-                            <input type="text" id="fPrice" name="price" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Size</label>
-                            <select id="fSize" name="size" required>
-                                <option value="">-- Select Size --</option>
-                                <option value="Small">Small</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Large">Large</option>
-                                <option value="Extra Large">Extra Large</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select id="fCategory" name="category">
-                                <option value="">-- Select Category --</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Product Images (optional)</label>
-                            <input type="file" id="fImages" name="images" accept="image/*" multiple>
-                            <div id="imageInfo" style="font-size:0.85rem;color:#666;margin-top:6px">No files selected (optional)</div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="button" class="btn-cancel" id="cancelBtn">CANCEL</button>
-                            <button type="submit" class="btn-save">SAVE CHANGES</button>
-                        </div>
-                    </form>
-                </div>
-            </aside>
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card"><span>Total</span>
+        <h2><%= stats.total %></h2>
+      </div>
+      <div class="stat-card"><span>Active</span>
+        <h2><%= stats.active %></h2>
+      </div>
+      <div class="stat-card"><span>Low Stock</span>
+        <h2 style="color:#e74c3c"><%= stats.low %></h2>
+      </div>
+    </div>
+
+    <div class="products-layout">
+
+      <!-- PRODUCTS -->
+      <section>
+        <div class="product-list" id="productList">
+          <% products.forEach(p => { %>
+            <div class="product-card <%= p.status !== 'ACTIVE' ? 'inactive' : '' %>" 
+                 data-id="<%= p._id %>">
+
+              <img class="product-img" src="<%= p.images?.[0] || '/images/placeholder.png' %>">
+
+              <div class="product-details">
+                <h4><%= p.name %></h4>
+                <p><%= p.description %></p>
+                <p><strong>₹<%= p.price %></strong> · <%= p.size %></p>
+              </div>
+
+              <div class="action-icons">
+                <label class="switch">
+                  <input type="checkbox" <%= p.status === 'ACTIVE' ? 'checked' : '' %>>
+                  <span class="slider"></span>
+                </label>
+                <span class="edit-trigger">📝 Edit</span>
+                <span class="delete-trigger">🗑 Delete</span>
+              </div>
+            </div>
+          <% }) %>
         </div>
+      </section>
+
+      <!-- FORM -->
+      <aside>
+        <div class="edit-panel">
+          <h3 id="formTitle">Add Product</h3>
+
+          <form id="productForm" method="POST" action="/profile/products" enctype="multipart/form-data">
+            <input type="hidden" id="methodField">
+            <input type="hidden" id="productId">
+
+            <div class="form-group">
+              <label>Name</label>
+              <input name="name" id="productName" required>
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="description" id="productDescription"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Price</label>
+              <input type="number" name="price" id="productPrice" required>
+            </div>
+
+            <div class="form-group">
+              <label>Size</label>
+              <select name="size" id="productSize" required>
+                <option value="">Select size</option>
+                <option value="Small">Small</option>
+                <option value="Medium">Medium</option>
+                <option value="Large">Large</option>
+                <option value="Extra Large">Extra Large</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Category</label>
+              <select name="category" id="categorySelect" required>
+                <option value="">Select category</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Style</label>
+              <select name="style" id="styleSelect" required>
+                <option value="">Select style</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Images</label>
+              <input type="file" id="imageInput" accept="image/*" multiple>
+            </div>
+
+            <div class="preview-grid" id="previewGrid"></div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-save">SAVE</button>
+            </div>
+          </form>
+        </div>
+      </aside>
+
+    </div>
+  </div>
 </main>
 
-    <!-- --- JAVASCRIPT FUNCTIONS --- -->
-    <script>
-        const productList = document.getElementById('productList');
-        const productForm = document.getElementById('productForm');
-        const formTitle = document.getElementById('formTitle');
-        const statTotal = document.getElementById('stat-total');
-
-        // Form fields
-        const fName = document.getElementById('fName');
-        const fDesc = document.getElementById('fDesc');
-        const fPrice = document.getElementById('fPrice');
-        const fSize = document.getElementById('fSize');
-
-        let currentEditCard = null;
-
-        // 1. EDIT FUNCTIONALITY (Event Delegation)
-        productList.addEventListener('click', (e) => {
-            const card = e.target.closest('.product-card');
-            if (!card) return;
-
-            // Handle Edit Click
-            if (e.target.classList.contains('edit-trigger')) {
-                currentEditCard = card;
-                formTitle.innerText = "Edit Product";
-
-                // Map UI to Form
-                fName.value = card.querySelector('h4').innerText;
-                fDesc.value = card.querySelector('p').innerText;
-                fPrice.value = card.querySelector('.price-val').innerText.replace('Price: ', '');
-                fSize.value = card.querySelector('.size-val').innerText.replace('Size: ', '');
-
-                // store product id on the form for update
-                productForm.dataset.editId = card.dataset.id;
-
-                // Visual feedback
-                document.querySelectorAll('.product-card').forEach(c => c.style.borderColor = 'transparent');
-                card.style.borderColor = '#ff7675';
-            }
-
-            // Handle Delete Click
-            if (e.target.classList.contains('delete-trigger')) {
-                const confirmDelete = confirm('Are you sure you want to delete this product?');
-                if (!confirmDelete) return;
-                const id = card.dataset.id;
-                fetch(`/profile/products/${id}/delete`, { method: 'POST', headers: { Accept: 'application/json' } })
-                  .then(async (r) => {
-                    const ct = r.headers.get('content-type') || '';
-                    if (ct.includes('application/json')) {
-                      const data = await r.json();
-                      if (!r.ok || !data.success) throw new Error(data.message || 'Delete failed');
-                      return data;
-                    }
-                    const text = await r.text();
-                    throw new Error(text || 'Delete failed (non-json response)');
-                  })
-                  .then(() => {
-                    // remove from DOM and update stats
-                    const totalEl = document.getElementById('stat-total');
-                    card.remove();
-                    totalEl.innerText = Math.max(0, parseInt(totalEl.innerText || '0', 10) - 1);
-                    alert('Product deleted');
-                    resetForm();
-                  })
-                  .catch(err => {
-                    console.error('Delete failed', err);
-                    alert((err && err.message) ? err.message : 'Delete failed');
-                  });
-            }
-        });
-
-        productForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const selectedCategory = document.getElementById('fCategory')?.value || '';
-            const files = document.getElementById('fImages')?.files || [];
-
-            if (currentEditCard) {
-                // Send update request to server using FormData
-                const editId = productForm.dataset.editId;
-                if (!editId) return alert('Missing product ID');
-
-                const fd = new FormData();
-                fd.append('name', fName.value);
-                fd.append('description', fDesc.value);
-                fd.append('price', fPrice.value);
-                fd.append('size', fSize.value);
-                fd.append('category', document.getElementById('fCategory')?.value || '');
-
-                // append any new images
-                for (let i = 0; i < files.length; i++) fd.append('images', files[i]);
-
-                fetch(`/profile/products/${editId}/edit`, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-                  .then(async (r) => {
-                    const ct = r.headers.get('content-type') || '';
-                    if (ct.includes('application/json')) {
-                      const data = await r.json();
-                      if (!r.ok || !data.success) throw new Error(data.message || 'Update failed');
-                      return data;
-                    }
-                    // non-json (likely HTML error) - read as text
-                    const text = await r.text();
-                    throw new Error(text || 'Update failed (non-json response)');
-                  })
-                  .then(data => {
-                    const style = data.product;
-                    // update DOM
-                    currentEditCard.querySelector('h4').innerText = style.name;
-                    currentEditCard.querySelector('p').innerText = style.description;
-                    currentEditCard.querySelector('.price-val').innerText = 'Price: ' + style.price;
-                    currentEditCard.querySelector('.size-val').innerText = 'Size: ' + (style.size || '—');
-                    if (style.images && style.images.length) {
-                      currentEditCard.querySelector('img.product-img').src = style.images[0];
-                    }
-
-                    alert('Product updated');
-                    resetForm();
-                  })
-                  .catch(err => {
-                    console.error('Update failed', err);
-                    alert((err && err.message) ? err.message : 'Update failed');
-                  });
-
-            } else {
-                // Submit the form to the server with multipart data
-                productForm.submit();
-            }
-
-        });
-
-        // image input feedback
-        const fImages = document.getElementById('fImages');
-        const imageInfo = document.getElementById('imageInfo');
-        const MAX_IMAGES = 50;
-        if (fImages) {
-            fImages.addEventListener('change', () => {
-                const count = fImages.files.length;
-                if (count > MAX_IMAGES) {
-                    alert(`Maximum ${MAX_IMAGES} images allowed`);
-                    fImages.value = '';
-                    imageInfo.textContent = `No files selected (max ${MAX_IMAGES})`;
-                    return;
-                }
-                imageInfo.textContent = count ? `${count} file(s) selected (max ${MAX_IMAGES})` : `No files selected (max ${MAX_IMAGES})`;
-            });
-        }
-
-        // Populate categories in the form
-        async function loadCategories() {
-            try {
-                const res = await fetch('/api/categories');
-                if (!res.ok) throw new Error('Failed to load categories');
-                const data = await res.json();
-                if (!data.success) throw new Error(data.message || 'No categories');
-                const sel = document.getElementById('fCategory');
-                data.categories.forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = c._id || c.name;
-                    opt.textContent = c.name;
-                    sel.appendChild(opt);
-                });
-            } catch (err) {
-                console.error('loadCategories error:', err);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', loadCategories);
-
-        // 3. ADD NEW BUTTON
-        document.getElementById('addNewBtn').addEventListener('click', () => {
-            resetForm();
-            formTitle.innerText = "Add New Product";
-            fName.focus();
-        });
-
-        // 4. CANCEL BUTTON
-        document.getElementById('cancelBtn').addEventListener('click', resetForm);
-
-        function resetForm() {
-            productForm.reset();
-            delete productForm.dataset.editId;
-            currentEditCard = null;
-            formTitle.innerText = "Edit Products";
-            document.querySelectorAll('.product-card').forEach(c => c.style.borderColor = 'transparent');
-            if (fImages) {
-              fImages.value = '';
-              if (imageInfo) imageInfo.textContent = 'No files selected (optional)';
-            }
-        }
-    </script>
-
 <%- include('../partials/footer') %>
+
+<script src="https://unpkg.com/cropperjs@1.6.1/dist/cropper.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const productList = document.getElementById('productList');
+  const form = document.getElementById('productForm');
+  const formTitle = document.getElementById('formTitle');
+  const methodField = document.getElementById('methodField');
+  const productId = document.getElementById('productId');
+  const addBtn = document.getElementById('addNewBtn');
+  const categorySelect = document.getElementById('categorySelect');
+  const styleSelect = document.getElementById('styleSelect');
+  const imageInput = document.getElementById('imageInput');
+  const previewGrid = document.getElementById('previewGrid');
+
+  let croppedFiles = [];
+  let currentProductData = null;
+
+  /* ===============================
+     LOAD CATEGORIES
+  ================================ */
+  async function loadCategories(selectedId = null) {
+    try {
+      console.log('Loading categories...');
+      const res = await fetch('/api/categories');
+      const data = await res.json();
+      
+      console.log('Categories response:', data);
+
+      if (data.success && data.categories && data.categories.length > 0) {
+        categorySelect.innerHTML = '<option value="">Select category</option>';
+        
+        data.categories.forEach(c => {
+          const option = document.createElement('option');
+          option.value = c._id;
+          option.textContent = c.name;
+          if (selectedId && c._id === selectedId) {
+            option.selected = true;
+          }
+          categorySelect.appendChild(option);
+        });
+        
+        console.log('Loaded', data.categories.length, 'categories');
+      } else {
+        console.warn('No categories found or invalid response');
+        categorySelect.innerHTML = '<option value="">No categories available</option>';
+      }
+    } catch (err) {
+      console.error('Failed to load categories:', err);
+      categorySelect.innerHTML = '<option value="">Error loading categories</option>';
+    }
+  }
+
+  /* ===============================
+     LOAD STYLES
+  ================================ */
+  async function loadStyles(selectedId = null) {
+    try {
+      console.log('Loading styles...');
+      const res = await fetch('/api/styles');
+      const data = await res.json();
+      
+      console.log('Styles response:', data);
+
+      if (data.success && data.styles && data.styles.length > 0) {
+        styleSelect.innerHTML = '<option value="">Select style</option>';
+        
+        data.styles.forEach(s => {
+          const option = document.createElement('option');
+          option.value = s._id;
+          option.textContent = s.name;
+          if (selectedId && s._id === selectedId) {
+            option.selected = true;
+          }
+          styleSelect.appendChild(option);
+        });
+        
+        console.log('Loaded', data.styles.length, 'styles');
+      } else {
+        console.warn('No styles found or invalid response');
+        styleSelect.innerHTML = '<option value="">No styles available</option>';
+      }
+    } catch (err) {
+      console.error('Failed to load styles:', err);
+      styleSelect.innerHTML = '<option value="">Error loading styles</option>';
+    }
+  }
+
+  /* ===============================
+     LOAD PRODUCT DATA FOR EDIT
+  ================================ */
+  async function loadProductForEdit(id) {
+    try {
+      formTitle.textContent = 'Loading...';
+      form.classList.add('loading');
+
+      const res = await fetch(`/api/products/${id}/edit`);
+      const data = await res.json();
+
+      if (data.success) {
+        currentProductData = data.product;
+
+        // Set form values
+        form.productName.value = data.product.name || '';
+        form.productDescription.value = data.product.description || '';
+        form.productPrice.value = data.product.price || '';
+        form.productSize.value = data.product.size || '';
+
+        // Load categories and styles with selected values
+        await Promise.all([
+          loadCategories(data.product.category),
+          loadStyles(data.product.style)
+        ]);
+
+        // Show existing images in preview
+        previewGrid.innerHTML = '';
+        if (data.product.images && data.product.images.length > 0) {
+          data.product.images.forEach(imgUrl => {
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.style.width = '100%';
+            img.style.height = '90px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '8px';
+            previewGrid.appendChild(img);
+          });
+        }
+
+        formTitle.textContent = 'Edit Product';
+        form.classList.remove('loading');
+      }
+    } catch (err) {
+      console.error('Failed to load product:', err);
+      alert('Failed to load product data');
+      form.classList.remove('loading');
+    }
+  }
+
+  /* ===============================
+     INITIALIZE SELECTS ON PAGE LOAD
+  ================================ */
+  loadCategories();
+  loadStyles();
+
+  /* ===============================
+     IMAGE CROP & PREVIEW
+  ================================ */
+  imageInput.addEventListener('change', async () => {
+    croppedFiles = [];
+    previewGrid.innerHTML = '';
+
+    for (const file of imageInput.files) {
+      await new Promise(resolve => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.style.maxWidth = '100%';
+        img.style.display = 'block';
+
+        previewGrid.appendChild(img);
+
+        img.onload = () => {
+          const cropper = new Cropper(img, {
+            aspectRatio: 1,
+            autoCropArea: 1,
+            viewMode: 1,
+            responsive: true,
+            movable: true,
+            zoomable: true,
+            scalable: true,
+            cropBoxResizable: true,
+            ready() {
+              const canvas = cropper.getCroppedCanvas({
+                width: 800,
+                height: 800
+              });
+
+              canvas.toBlob(blob => {
+                const cropped = new File(
+                  [blob],
+                  file.name.replace(/\.(jpg|jpeg|png)$/i, '') + '.jpg',
+                  { type: 'image/jpeg' }
+                );
+
+                croppedFiles.push(cropped);
+
+                const preview = document.createElement('img');
+                preview.src = URL.createObjectURL(blob);
+                preview.style.width = '100%';
+                preview.style.height = '90px';
+                preview.style.objectFit = 'cover';
+                preview.style.borderRadius = '8px';
+
+                previewGrid.replaceChild(preview, img);
+
+                cropper.destroy();
+                resolve();
+              }, 'image/jpeg', 0.9);
+            }
+          });
+        };
+      });
+    }
+  });
+
+  /* ===============================
+     ADD NEW PRODUCT
+  ================================ */
+  addBtn.onclick = () => {
+    form.reset();
+    form.action = '/profile/products';
+    methodField.value = '';
+    productId.value = '';
+    formTitle.textContent = 'Add Product';
+    currentProductData = null;
+
+    previewGrid.innerHTML = '';
+    croppedFiles = [];
+
+    loadCategories();
+    loadStyles();
+  };
+
+  /* ===============================
+     EDIT & DELETE HANDLERS
+  ================================ */
+  productList.addEventListener('click', async e => {
+    const card = e.target.closest('.product-card');
+    if (!card) return;
+
+    const id = card.dataset.id;
+
+    // EDIT
+    if (e.target.classList.contains('edit-trigger')) {
+      form.action = `/profile/products/${id}`;
+      methodField.value = 'PUT';
+      productId.value = id;
+
+      await loadProductForEdit(id);
+    }
+
+    // DELETE
+    if (e.target.classList.contains('delete-trigger')) {
+      if (!confirm('Delete this product?')) return;
+
+      try {
+        const res = await fetch(`/profile/products/${id}`, { 
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          card.remove();
+          alert('Product deleted successfully');
+        } else {
+          alert(data.message || 'Failed to delete product');
+        }
+      } catch (err) {
+        console.error('Delete error:', err);
+        alert('Failed to delete product');
+      }
+    }
+  });
+
+  /* ===============================
+     STATUS TOGGLE
+  ================================ */
+  productList.addEventListener('change', async e => {
+    if (!e.target.closest('.switch')) return;
+
+    const card = e.target.closest('.product-card');
+    const id = card.dataset.id;
+    const active = e.target.checked;
+
+    try {
+      const res = await fetch(`/profile/products/${id}/toggle`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ active })
+      });
+
+      const data = await res.json();
+      
+      if (data.success) {
+        card.classList.toggle('inactive', !active);
+      } else {
+        e.target.checked = !active;
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (err) {
+      console.error('Toggle error:', err);
+      e.target.checked = !active;
+      alert('Failed to update status');
+    }
+  });
+
+  /* ===============================
+     FORM SUBMIT
+  ================================ */
+  form.addEventListener('submit', (e) => {
+    if (croppedFiles.length > 0) {
+      const dt = new DataTransfer();
+      croppedFiles.forEach(f => dt.items.add(f));
+
+      const hidden = document.createElement('input');
+      hidden.type = 'file';
+      hidden.name = 'images';
+      hidden.files = dt.files;
+      hidden.hidden = true;
+
+      form.appendChild(hidden);
+    }
+  });
+});
+</script>

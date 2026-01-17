@@ -1,10 +1,14 @@
 import Category from "../../models/admin/categorySchema.js";
 import { sanitizeInput, validateObjectId } from "../../utils/validators.js";
 
-export const getAllCategoriesService = async () => {
-  const categories = await Category.find().sort({ createdAt: -1 }).lean();
-  return categories;
+export const getAllCategoriesService = async (sort = 'newest') => {
+  const sortQuery = sort === 'oldest'
+    ? { createdAt: 1 }
+    : { createdAt: -1 };
+
+  return Category.find().sort(sortQuery);
 };
+
 
 export const addCategoryService = async ({ name, isListed = true, createdBy = null }) => {
   if (!name || !name.trim()) {

@@ -4,7 +4,6 @@ import {
 } from "../../services/admin/admin.service.js";
 import { sanitizeInput } from "../../utils/validators.js";
 
-// ================= admin customer page ================= //
 export const AdminCustomersPage = async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
